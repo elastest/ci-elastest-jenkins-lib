@@ -6,8 +6,8 @@ def call(body) {
     body.delegate = config
 	
 	//check the execution ${sharedElastest}
-	echo " \$ {config.sharedElastest} ${config.sharedElastest}" 
-	echo " \$ config.sharedElastest $config.sharedElastest" 
+	echo " \$ {config.sharedElastest}" + ${config.sharedElastest}
+	echo " \$ config.sharedElastest " + $config.sharedElastest" 
 	
 	if ( '${config.sharedElastest}' ){
 		node ('sharedElastest'){
@@ -44,10 +44,10 @@ def call(body) {
 			body();	
 			
 			stage ('release elastest')
-				echo ('TODO: check what to do with that...')
+				echo ('Shared elastest wont be ende because other jobs would be using it')
 		}
 	}
-	else{
+	else {
 		node('commonE2E'){
 			stage ('launch elastest')
 				echo ('NOT sharedElastest')
