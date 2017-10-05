@@ -41,7 +41,7 @@ def call(body) {
 	//check the execution ${sharedElastest}
 		
 		
-	if ( "$SHARED_ELASTEST" ){
+	if ( "$SHARED_ELASTEST" == 'true' ){
 		node ('sharedElastest'){
 			stage ('launch elastest' )			
 				echo "sharedElastest= $SHARED_ELASTEST"
