@@ -6,12 +6,12 @@ def call(body) {
     body.delegate = config
 	
 	//check the execution ${sharedElastest}
-	stage ('share options')
-		sh "echo 'building ${config.sharedElastest} ...'"
+		
 		
 	if ( '${config.sharedElastest}' ){
 		node ('sharedElastest'){
 			stage ('launch elastest')
+				sh "echo 'shared ${config.sharedElastest} ...'"
 				echo ('sharedElastest')
 				echo ('retrieve scripts')
 				
@@ -50,6 +50,7 @@ def call(body) {
 	else {
 		node('commonE2E'){
 			stage ('launch elastest')
+				sh "echo 'shared ${config.sharedElastest} ...'"
 				echo ('NOT sharedElastest')
 				echo ('TODO: run elastest')
 				echo ('TODO: provide elastest feedback')
