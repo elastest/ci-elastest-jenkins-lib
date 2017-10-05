@@ -19,8 +19,9 @@ def call(body) {
 				
 				echo ('TODO: check if elastest is running')
 				sh 'ls -ltr ci-elastest-jenkins-lib/scripts '
-				elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
-								
+				def elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
+				echo 'elastest_is_running = $elastest_is_running'
+				echo 'elastest_is_running = ${elastest_is_running}'
 				if (elastest_is_running != 0 ){
 					sh '. ./ci-elastest-jenkins-lib/scripts/startElastest.sh'
 				}
