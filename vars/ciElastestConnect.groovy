@@ -17,10 +17,8 @@ def call(body) {
 				
 				sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
 				
-				sh 'pwd'
-				sh 'cd ci-elastest-jenkins-lib && ls'
-				
 				echo ('TODO: check if elastest is running')
+				sh 'ls -ltr ci-elastest-jenkins-lib/scripts '
 				elastest_is_running = sh ( script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py',
 								 returnStdout: true).trim()
 								
