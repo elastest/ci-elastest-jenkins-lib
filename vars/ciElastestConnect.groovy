@@ -1,3 +1,7 @@
+/*
+* Method to start ElasTest with the default method: docker image.
+* In case that some arises the method will try to stop all the ElasTest components that had been started
+*/
 def startElastest(){
 	def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result
@@ -10,7 +14,7 @@ def startElastest(){
 		def stop_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
 	}
 	
-	return start_elastest_result
+	return (elastest_is_running==0)
 }
 
 def checkETM(){
@@ -19,6 +23,11 @@ def checkETM(){
 	def elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
 	
 	return (elastest_is_running == 0)
+}
+
+def stopElastest(){
+	def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop  --forcepull --nocheck', returnStatus:true
+	echo 'start_elastest_result = '+start_elastest_result	
 }
 
 
@@ -47,6 +56,9 @@ def call(body) {
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
 					elastest_is_running = startElastest()
+					if (! elastest_is_running){
+						currentBuild.result = 'FAILURE'
+					}
 				}
 				else {
 					echo 'TODO: provide elastest feedback'
@@ -62,17 +74,17 @@ def call(body) {
 		node('commonE2E'){
 			stage ('launch elastest')
 				echo ('sharedElastest=$SHARED_ELASTEST')
-				echo ('TODO: run elastest')
 				def elastest_is_running = startElastest()
-				
+				if (! elastest_is_running){
+						currentBuild.result = 'FAILURE'
+				}
 				echo ('TODO: provide elastest feedback')
 				
 			//body of the pipeline	
 			body();
 			
 			stage ('release elastest')
-				echo ('TODO: stop elastest')
-				echo ('TODO: clean elastest')
+				stopElastest()
 		}
 	}
 }
