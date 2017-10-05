@@ -7,7 +7,7 @@ def call(body) {
 	
 	//check the execution ${sharedElastest}
 	echo " \$ {config.sharedElastest}" + ${config.sharedElastest}
-	echo " \$ config.sharedElastest " + $config.sharedElastest" 
+	echo " \$ config.sharedElastest " + $config.sharedElastest
 	
 	if ( '${config.sharedElastest}' ){
 		node ('sharedElastest'){
