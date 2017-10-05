@@ -26,8 +26,8 @@ def call(body) {
 				if (elastest_is_running != 0 ){
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
-					sh 'cd ci-elastest-jenkins-lib/scripts && cat startElastest.sh'
-					sh 'cd ci-elastest-jenkins-lib/scripts && #!/bin/bash -x ./startElastest.sh'
+					def start_elastest_result = sh  script: 'cd ci-elastest-jenkins-lib/scripts && #!/bin/bash -x ./startElastest.sh', returnStatus:true
+					echo 'start_elastest_result = '+start_elastest_result
 				}
 				else {
 					echo 'TODO: provide elastest feedback'
