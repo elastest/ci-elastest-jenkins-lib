@@ -21,11 +21,11 @@ def call(body) {
 				sh 'cd ci-elastest-jenkins-lib && ls'
 				
 				echo ('TODO: check if elastest is running')
-				elastest_is_running = sh ( script: 'python scripts/checkETM.py',
+				elastest_is_running = sh ( script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py',
 								 returnStdout: true).trim()
 								
 				if (elastest_is_running != 0 ){
-					sh '. ./scripts/startElastest.sh'
+					sh '. ./ci-elastest-jenkins-lib/scripts/startElastest.sh'
 				}
 				else {
 					echo ('TODO: provide elastest feedback')
