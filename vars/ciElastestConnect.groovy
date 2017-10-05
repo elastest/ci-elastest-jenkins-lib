@@ -23,7 +23,7 @@ def call(body) {
 				echo 'elastest_is_running = '+elastest_is_running
 				
 				if (elastest_is_running != 0 ){
-					sh '#!/bin/bash -xe . ci-elastest-jenkins-lib/scripts/startElastest.sh'
+					sh 'cd ci-elastest-jenkins-lib/scripts && #!/bin/bash -xe ./startElastest.sh'
 				}
 				else {
 					echo 'TODO: provide elastest feedback'
