@@ -8,7 +8,7 @@ def startElastest(){
 
 	if (start_elastest_result == 0){
 		elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
-		echo 'elastest_is_running = '+elastest_is_running
+		echo 'elastest_is_running = '+ (elastest_is_running==0)
 	}
 	else {
 		def stop_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
