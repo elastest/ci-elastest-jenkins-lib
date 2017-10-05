@@ -15,10 +15,10 @@ def call(body) {
 				echo ('sharedElastest')
 				echo ('retrieve scripts')
 				
-				git https://github.com/elastest/ci-elastest-jenkins-lib.git
+				sh 'git clone https://github.com/elastest/ci-elastest-jenkins-lib.git'
 				
 				sh 'pwd'
-				sh 'ls'
+				sh 'cd ci-elastest-jenkins-lib && ls'
 				
 				echo ('TODO: check if elastest is running')
 				elastest_is_running = sh ( script: 'python scripts/checkETM.py',
