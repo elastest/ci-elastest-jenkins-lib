@@ -12,6 +12,10 @@ def call(body) {
 		node ('sharedElastest'){
 			stage ('launch elastest')
 				sh "echo 'shared ${config.sharedElastest} ...'"
+				sh "echo 'shared ${SHARED_ELASTEST} ...'"
+				sh "echo 'shared $SHARED_ELASTEST ...'"
+				echo "shared $SHARED_ELASTEST"
+				
 				echo ('sharedElastest')
 				echo ('retrieve scripts')
 				
