@@ -11,14 +11,24 @@ def call(body) {
 		node ('sharedElastest'){
 			stage ('launch elastest')
 				echo ('sharedElastest')
+				echo ('retrieve scripts')
+				git https://github.com/elastest/ci-elastest-jenkins-lib.git
+				
 				echo ('TODO: check if elastest is running')
-				def elastest_is_running = false
-				if (! elastest_is_running ){
-					echo ('TODO: run elastest')
+				elastest_is_running = sh ( script: 'python scripts/checkETM.py',
+								 returnStdout: true).trim()
+								
+				if (elastest_is_running != 0 ){
+					sh '. ./scripts/startElastest.sh'
 				}
 				else {
 					echo ('TODO: provide elastest feedback')
 				}
+				
+				
+				
+				
+				
 			//body of the pipeline
 			body();	
 			
