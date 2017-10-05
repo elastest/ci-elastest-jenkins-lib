@@ -79,3 +79,4 @@ else
 	echo 'ElasTest ETM not started'
 fi
 
+echo 'End of elastest start script'
