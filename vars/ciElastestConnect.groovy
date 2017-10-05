@@ -13,6 +13,15 @@ def startElastest(){
 	return start_elastest_result
 }
 
+def checkETM(){
+	sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
+	sh 'ls -ltr ci-elastest-jenkins-lib/scripts '
+	def elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
+	
+	return (elastest_is_running == 0)
+}
+
+
 def call(body) {
 	def config = [:] //values for configure the job
 					 //in a future version of the components? by default latest
@@ -26,18 +35,13 @@ def call(body) {
 	if ( "$SHARED_ELASTEST" ){
 		node ('sharedElastest'){
 			stage ('launch elastest' )			
-				echo ('sharedElastest=$SHARED_ELASTEST')
+				echo "sharedElastest= $SHARED_ELASTEST"
 				echo ('retrieve scripts')
-				
 				sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
 				
-				echo ('TODO: check if elastest is running')
-				sh 'ls -ltr ci-elastest-jenkins-lib/scripts '
-				def elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
-				
-				echo 'elastest_is_running = '+elastest_is_running
-				
-				if (elastest_is_running != 0 ){
+				def elastest_is_running = checkETM()
+							
+				if (elastest_is_running){
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
 					elastest_is_running = startElastest()
