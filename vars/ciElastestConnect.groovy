@@ -26,7 +26,7 @@ def call(body) {
 				if (elastest_is_running != 0 ){
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
-					def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start --lite --forcepull --nocheck', returnStatus:true
+					def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
 					echo 'start_elastest_result = '+start_elastest_result
 
 					if (start_elastest_result == 0){
@@ -34,7 +34,7 @@ def call(body) {
 						echo 'elastest_is_running = '+elastest_is_running
 					}
 					else {
-						def stop_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --lite --forcepull --nocheck', returnStatus:true
+						def stop_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
 					}
 				}
 				else {
