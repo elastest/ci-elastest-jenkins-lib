@@ -28,11 +28,6 @@ def call(body) {
 				else {
 					echo 'TODO: provide elastest feedback'
 				}
-				
-				
-				
-				
-				
 			//body of the pipeline
 			body();	
 			
