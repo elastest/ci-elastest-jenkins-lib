@@ -6,9 +6,10 @@ def call(body) {
     body.delegate = config
 	
 	//check the execution ${sharedElastest}
-	echo " ${config.sharedElastest} " 
+	echo " \$ {config.sharedElastest} ${config.sharedElastest}" 
+	echo " \$ config.sharedElastest $config.sharedElastest" 
 	
-	if ( '${config.sharedElastest}'){
+	if ( '${config.sharedElastest}' ){
 		node ('sharedElastest'){
 			stage ('launch elastest')
 				echo ('sharedElastest')
