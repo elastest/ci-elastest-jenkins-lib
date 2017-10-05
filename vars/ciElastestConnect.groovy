@@ -8,7 +8,7 @@ def call(body) {
 	//check the execution ${sharedElastest}
 	echo " ${config.sharedElastest} " 
 	
-	if (${config.sharedElastest}){
+	if ( '${config.sharedElastest}'){
 		node ('sharedElastest'){
 			stage ('launch elastest')
 				echo ('sharedElastest')
