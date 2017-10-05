@@ -37,11 +37,13 @@ def call(body) {
 			stage ('launch elastest' )			
 				echo "sharedElastest= $SHARED_ELASTEST"
 				echo ('retrieve scripts')
+				
 				sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
 				
 				def elastest_is_running = checkETM()
-							
-				if (elastest_is_running){
+				echo "elastest_is_running? "+ elastest_is_running
+				
+				if (!elastest_is_running){
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
 					elastest_is_running = startElastest()
