@@ -2,7 +2,7 @@
 
 Copyright © 2017-2019 [ElasTest]. Licensed under [Apache 2.0 License].
 
-elastest-jenkins-pipeline
+ci-elastest-jenkins-lib
 ==============================
 
 ElasTest Jenkins Library (for pipelines).
