@@ -15,7 +15,7 @@ def call(body) {
 				echo ('sharedElastest')
 				echo ('retrieve scripts')
 				
-				sh 'git clone https://github.com/elastest/ci-elastest-jenkins-lib.git'
+				sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
 				
 				sh 'pwd'
 				sh 'cd ci-elastest-jenkins-lib && ls'
