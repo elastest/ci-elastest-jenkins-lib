@@ -6,13 +6,18 @@ def call(body) {
     body.delegate = config
 	
 	//check the execution ${sharedElastest}
-	echo '${sharedElastest}'
+	echo ${sharedElastest}
+	
 	if ('${sharedElastest}'){
 		node ('sharedElastest'){
 			stage ('launch elastest')
 				echo ('sharedElastest')
 				echo ('retrieve scripts')
+				
 				git https://github.com/elastest/ci-elastest-jenkins-lib.git
+				
+				sh 'pwd'
+				sh 'ls'
 				
 				echo ('TODO: check if elastest is running')
 				elastest_is_running = sh ( script: 'python scripts/checkETM.py',
