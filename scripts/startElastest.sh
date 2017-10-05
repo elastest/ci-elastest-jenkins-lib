@@ -78,3 +78,4 @@ if [ $responseCheck = '200' ]; then
 else
 	echo 'ElasTest ETM not started'
 fi
+
