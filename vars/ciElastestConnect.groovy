@@ -11,10 +11,10 @@ def startElastest(){
 	condition = sh script: 'nc -z -v "$ET_ETM_API" 8091 2> /dev/null', returnStatus:true
 	echo 'nc -z -v "$ET_ETM_API" 8091 2> /dev/null == '+condition
 	
-	while (!condition) { 
-		sleep(2000)
+	while ( ! condition ) { 
+		sleep (2000)
 		counter = counter -1
-		if (counter = 0){
+		if (counter == 0){
 			echo "Timeout while wait for ETM started"
 			start_elastest_result = -1
 			break
