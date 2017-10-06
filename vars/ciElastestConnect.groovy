@@ -4,7 +4,7 @@
 */
 def getEtmIp () {
 	def etm_ip = sh script: "docker inspect --format=\"{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}\" elastest_etm_1 2> /dev/null", returnStdout:true
-	def etm_ip_error = sh script: "echo $?", returnStdout:true
+	def etm_ip_error = sh script: "echo ${?}", returnStdout:true
 	echo etm_ip_error
 	if (etm_ip_error != 0){
 		echo etm_ip
