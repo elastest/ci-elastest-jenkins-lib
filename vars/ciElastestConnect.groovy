@@ -4,7 +4,7 @@
 */
 def getEtmIp () {
 	def etm_ip = sh script: "docker inspect --format=\"{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}\" elastest_etm_1 2> /dev/null", returnStdout:true
-	def etm_ip_error = sh script: "echo ${?}", returnStdout:true
+	def etm_ip_error = sh script: "echo \$?", returnStdout:true
 	echo etm_ip_error
 	if (etm_ip_error != 0){
 		echo etm_ip
@@ -14,7 +14,7 @@ def getEtmIp () {
 }
 
 def startElastest(){
-	def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result
 	getEtmIp()
 	//give the component time to start 
@@ -33,11 +33,11 @@ def startElastest(){
 	}
 		
 	if (start_elastest_result == 0){
-		elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
+		elastest_is_running = sh script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
 		echo 'elastest_is_running = '+ (elastest_is_running==0)
 	}
 	else {
-		def stop_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
+		def stop_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
 	}
 	
 	return (elastest_is_running==0)
@@ -52,7 +52,7 @@ def checkETM(){
 }
 
 def stopElastest(){
-	def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop  --forcepull --nocheck', returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result	
 }
 
