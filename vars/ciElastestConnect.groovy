@@ -5,7 +5,22 @@
 def startElastest(){
 	def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result
-
+	
+	//give the component time to start 
+	counter = 90
+	condition = sh script: 'nc -z -v "$ET_ETM_API" 8091 2> /dev/null', returnStatus:true
+	echo 'nc -z -v "$ET_ETM_API" 8091 2> /dev/null == '+condition
+	
+	while (!condition) { 
+		sleep(2000)
+		counter = counter -1
+		if (counter = 0){
+			echo "Timeout while wait for ETM started"
+			start_elastest_result = -1
+			break
+		}
+	}
+		
 	if (start_elastest_result == 0){
 		elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
 		echo 'elastest_is_running = '+ (elastest_is_running==0)
