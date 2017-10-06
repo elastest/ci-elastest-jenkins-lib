@@ -9,7 +9,7 @@ def getEtmIp () {
 	echo etm_ip_error
 	
 	if (etm_ip_error != 0){+
-		def etm_ip = sh script; "cat empIp.txt", returnStdout:true
+		def etm_ip = sh script: "cat empIp.txt", returnStdout:true
 		echo etm_ip
 		sh 'export ET_ETM_API='+etm_ip
 	}
