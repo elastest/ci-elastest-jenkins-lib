@@ -3,7 +3,8 @@
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
 def getEtmIp () {
-	def etm_ip = sh script: 'docker inspect --format="{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}" elastest_etm_1 2> /dev/null', returnStdout:true
+	comillas = '"'
+	def etm_ip = sh script: "docker inspect --format="+comillas+"{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}"+comillas+ " elastest_etm_1 2> /dev/null", returnStdout:true
 	def etm_ip_error = sh script: "echo \$?", returnStdout:true
 	echo etm_ip_error
 	if (etm_ip_error != 0){
