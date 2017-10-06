@@ -3,10 +3,10 @@
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
 def startElastest(){
-	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck --name elastest_platform', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result
 	sh script: 'docker ps', returnStatus: true
-	def condition = sh script: 'docker ps | grep etm_1 ', returnStatus:true
+	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStdout:true
 	
 	echo condition
 	
