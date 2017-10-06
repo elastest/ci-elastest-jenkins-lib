@@ -2,14 +2,25 @@
 * Method to start ElasTest with the default method: docker image.
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
+def getEtmIp () {
+	def etm_ip = sh script: "docker inspect --format=\"{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}\" elastest_etm_1 2> /dev/null", returnStdout:true
+	def etm_ip_error = sh script: "echo $?", returnStdout:true
+	echo etm_ip_error
+	if (etm_ip_error != 0){
+		echo etm_ip
+		sh 'export ET_ETM_API='+etm_ip
+	}
+	return etm_ip_error	
+}
+
 def startElastest(){
 	def start_elastest_result = sh  script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result
-	
+	getEtmIp()
 	//give the component time to start 
 	counter = 90
-	condition = sh script: 'nc -z -v "$ET_ETM_API" 8091 2> /dev/null', returnStatus:true
-	echo 'nc -z -v "$ET_ETM_API" 8091 2> /dev/null == '+condition
+	condition = sh script: "nc -z -v $ET_ETM_API 8091 2> /dev/null", returnStatus:true
+	echo "nc -z -v $ET_ETM_API 8091 2> /dev/null == "+condition
 	
 	while ( ! condition ) { 
 		sleep (2000)
