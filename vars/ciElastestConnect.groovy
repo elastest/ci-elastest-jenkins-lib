@@ -4,7 +4,7 @@
 */
 def getEtmIp () {
 
-	sh "docker inspect --format='{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}' elastest_etm_1 2> empIp.txt"
+	sh "docker inspect --format=\'{{.NetworkSettings.Networks.elastest_elastest.IPAddress}}\' elastest_etm_1 2> empIp.txt"
 	def etm_ip_error = sh script: "echo \$?", returnStdout:true
 	echo etm_ip_error
 	
@@ -73,7 +73,7 @@ def call(body) {
 	if ( "$SHARED_ELASTEST" == 'true' ){
 		node ('sharedElastest'){
 			stage ('launch elastest' )			
-				echo "sharedElastest= $SHARED_ELASTEST"
+				echo "sharedElastest = ${SHARED_ELASTEST}"
 				echo ('retrieve scripts')
 				
 				sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
@@ -102,7 +102,7 @@ def call(body) {
 	else {
 		node('commonE2E'){
 			stage ('launch elastest')
-				echo ('sharedElastest=$SHARED_ELASTEST')
+				echo "sharedElastest = ${SHARED_ELASTEST}"
 				def elastest_is_running = startElastest()
 				if (! elastest_is_running){
 						currentBuild.result = 'FAILURE'
