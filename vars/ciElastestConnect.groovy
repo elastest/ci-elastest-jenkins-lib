@@ -14,6 +14,7 @@ def startElastest(){
 	counter = 90
 	
 	while ( condition == '0' ) { 
+		echo 'inside the while'
 		sleep (2000)
 		counter = counter -1
 		if (counter == 0){
@@ -21,8 +22,8 @@ def startElastest(){
 			start_elastest_result = -1
 			break
 		}
-		
 		condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStdout:true
+		echo condition
 	}
 		
 	if (start_elastest_result == 0){
