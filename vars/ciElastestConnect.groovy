@@ -5,7 +5,8 @@
 def startElastest(){
 	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result
-	def condition = sh script: 'docker ps | grep etm_1', returnStdout:true
+	sh script: 'docker ps', returnStatus: true
+	def condition = sh script: 'docker ps | grep etm_1 ', returnStatus:true
 	
 	echo condition
 	
