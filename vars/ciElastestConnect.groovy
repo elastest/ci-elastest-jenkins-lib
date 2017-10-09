@@ -20,7 +20,7 @@ def startElastest(){
 	//give the component time to start 
 	counter = 90
 	
-	while ( condition == '1' ) { //if the ps fails...
+	while ( condition == 1 ) { //if the ps fails...
 		echo 'startElastest-- inside the while'
 		sleep (2000)
 		counter = counter -1
@@ -34,6 +34,8 @@ def startElastest(){
 	}
 	
 	echo 'startElastest-- start_elastest_result='+start_elastest_result
+	
+	def elastest_is_running = false
 	
 	if (start_elastest_result == 0){
 		elastest_is_running = sh script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
