@@ -8,7 +8,7 @@ def startElastest(){
 	echo 'startElastest-- start_elastest_result = '+start_elastest_result
 	
 	sh script: 'docker ps', returnStatus: true
-	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStdout:true, returnStatus:true
+	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true, returnStdout:true 
 	
 	echo 'startElastest-- Condition: '+condition
 	
