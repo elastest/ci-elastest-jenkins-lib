@@ -22,7 +22,7 @@ def startElastest(){
 	
 	while ( condition == 1 ) { //if the ps fails...
 		echo 'startElastest-- inside the while'
-		sleep (2000)
+		sleep (0.2)
 		counter = counter -1
 		if (counter == 0){
 			echo "startElastest-- Timeout while wait for ETM started"
