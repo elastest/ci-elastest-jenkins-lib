@@ -3,8 +3,13 @@
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
 def startElastest(){
+	def little = ''
+	if ($ELASTEST_LITTLE=='true'){
+		little = '--little'
+	}
+	
 	echo '[INI] startElastest'
-	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck --name="elastest_platform"', returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck '+ little, returnStatus:true
 	echo 'startElastest-- start_elastest_result = '+start_elastest_result
 	
 	sh script: 'docker ps', returnStatus: true
