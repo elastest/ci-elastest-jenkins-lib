@@ -13,14 +13,14 @@ def startElastest(){
 	echo 'startElastest-- start_elastest_result = '+start_elastest_result
 	
 	sh script: 'docker ps', returnStatus: true
-	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true, returnStdout:true 
+	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
 	
 	echo 'startElastest-- Condition: '+condition
 	
 	//give the component time to start 
 	counter = 90
 	
-	while ( condition == '0' ) { 
+	while ( condition == '1' ) { //if the ps fails...
 		echo 'startElastest-- inside the while'
 		sleep (2000)
 		counter = counter -1
@@ -29,7 +29,7 @@ def startElastest(){
 			start_elastest_result = -1
 			break
 		}
-		condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStdout:true
+		condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
 		echo '\t startElastest-- Condition: '+condition
 	}
 	
