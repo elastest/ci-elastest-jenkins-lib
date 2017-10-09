@@ -4,8 +4,8 @@
 */
 def startElastest(){
 	def little = ''
-	if ("$ELASTEST_LITTLE"=='true'){
-		little = '--little'
+	if ("$ELASTEST_LITE"=='true'){
+		little = '--lite'
 	}
 	
 	echo '[INI] startElastest'
@@ -29,6 +29,7 @@ def startElastest(){
 			start_elastest_result = -1
 			break
 		}
+		sh script: 'docker ps', returnStatus: true
 		condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
 		echo '\t startElastest-- Condition: '+condition
 	}
