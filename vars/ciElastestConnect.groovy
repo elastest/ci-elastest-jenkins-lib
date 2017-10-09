@@ -4,7 +4,7 @@
 */
 def startElastest(){
 	def little = ''
-	if ($ELASTEST_LITTLE=='true'){
+	if ("$ELASTEST_LITTLE"=='true'){
 		little = '--little'
 	}
 	
