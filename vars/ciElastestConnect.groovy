@@ -3,37 +3,43 @@
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
 def startElastest(){
-	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck --name elastest_platform', returnStatus:true
-	echo 'start_elastest_result = '+start_elastest_result
+	echo '[INI] startElastest'
+	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck --name="elastest_platform"', returnStatus:true
+	echo 'startElastest-- start_elastest_result = '+start_elastest_result
+	
 	sh script: 'docker ps', returnStatus: true
 	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStdout:true
 	
-	echo condition
+	echo 'startElastest-- Condition: '+condition
 	
 	//give the component time to start 
 	counter = 90
 	
 	while ( condition == '0' ) { 
-		echo 'inside the while'
+		echo 'startElastest-- inside the while'
 		sleep (2000)
 		counter = counter -1
 		if (counter == 0){
-			echo "Timeout while wait for ETM started"
+			echo "startElastest-- Timeout while wait for ETM started"
 			start_elastest_result = -1
 			break
 		}
 		condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStdout:true
-		echo condition
+		echo '\t startElastest-- Condition: '+condition
 	}
-		
+	
+	echo 'startElastest-- start_elastest_result='+start_elastest_result
+	
 	if (start_elastest_result == 0){
 		elastest_is_running = sh script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
-		echo 'elastest_is_running = '+ (elastest_is_running==0)
+		echo 'startElastest-- elastest_is_running = '+ (elastest_is_running==0)
 	}
 	else {
+		echo 'startElastest-- stop platform as the etm has not been launched'
 		def stop_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
 	}
 	
+	echo '[END] startElastest'
 	return (elastest_is_running==0)
 }
 
