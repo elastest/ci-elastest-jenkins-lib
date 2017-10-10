@@ -67,6 +67,7 @@ def call(body) {
 					echo 'START Shared ElasTest'
 					startElastest()
 					elastest_is_running = waitElastest()
+					sh script: 'docker ps | grep elastest_', returnStatus:true
 					if (! elastest_is_running){
 						currentBuild.result = 'FAILURE'
 						return
@@ -101,7 +102,7 @@ def call(body) {
 				}
 				startElastest()
 				elastest_is_running = waitElastest()
-				elastest_is_running = elastestIsRunning()
+				sh script: 'docker ps | grep elastest_', returnStatus:true
 				echo 'elastest_is_running:'+elastest_is_running
 				if (! elastest_is_running){
 					currentBuild.result = 'FAILURE'
