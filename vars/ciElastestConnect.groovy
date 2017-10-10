@@ -5,12 +5,12 @@
 def startElastest(){
 	echo '[INI] startElastest'
 
-	def little = ''
+	def lite = ''
 	if ("$ELASTEST_LITE"=='true'){
-		little = '--lite'
+		lite = '--lite'
 	}
 	
-	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start --forcepull'+ little, returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start --forcepull '+ lite, returnStatus:true
 	echo 'startElastest-- start_elastest_result = '+start_elastest_result
 	
 	echo '[END] startElastest'
