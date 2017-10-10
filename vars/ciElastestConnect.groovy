@@ -68,7 +68,15 @@ def call(body) {
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
 					startElastest()
-					elastest_is_running = waitElastest()
+					//lets set more time for waiting
+					def counter = 3
+					while (!elastest_is_running && counter > 0){
+						elastest_is_running = waitElastest()
+						counter = counter -1
+						def return_status = sh script: 'docker ps | grep elastest_', returnStatus:true
+						echo 'elastest_is_running:'+elastest_is_running
+					}
+						
 					def return_status = sh script: 'docker ps | grep elastest_', returnStatus:true
 					if (! elastest_is_running){
 						currentBuild.result = 'FAILURE'
@@ -94,7 +102,7 @@ def call(body) {
 				def elastest_is_running = elastestIsRunning()
 				if (elastest_is_running){ //stop and start again --> elastest is unique and fresh with each start
 					stopElastest()
-					sleep(10)
+					sleep(10)//TODO: change for method like waitToStop or something like that
 					elastest_is_running = elastestIsRunning()
 					echo 'elastest_is_running:'+elastest_is_running
 					if (elastest_is_running){
@@ -103,9 +111,15 @@ def call(body) {
 					}	
 				}
 				startElastest()
-				elastest_is_running = waitElastest()
-				def return_status = sh script: 'docker ps | grep elastest_', returnStatus:true
-				echo 'elastest_is_running:'+elastest_is_running
+				//lets set more time for waiting
+				def counter = 3
+				while (!elastest_is_running && counter > 0){
+					elastest_is_running = waitElastest()
+					def return_status = sh script: 'docker ps | grep elastest_', returnStatus:true
+					echo 'elastest_is_running:'+elastest_is_running
+					counter = counter -1
+				}
+
 				if (! elastest_is_running){
 					currentBuild.result = 'FAILURE'
 					return
