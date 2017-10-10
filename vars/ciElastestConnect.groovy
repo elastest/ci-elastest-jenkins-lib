@@ -3,69 +3,48 @@
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
 def startElastest(){
+	echo '[INI] startElastest'
+
 	def little = ''
 	if ("$ELASTEST_LITE"=='true'){
 		little = '--lite'
 	}
 	
-	echo '[INI] startElastest'
 	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck '+ little, returnStatus:true
 	echo 'startElastest-- start_elastest_result = '+start_elastest_result
 	
-	sh script: 'docker ps', returnStatus: true
-	def condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
-	
-	echo 'startElastest-- Condition: '+condition
-	
-	//give the component time to start 
-	counter = 90
-	
-	while ( condition == 1 ) { //if the ps fails...
-		echo 'startElastest-- inside the while'
-		sleep (1)
-		counter = counter -1
-		if (counter == 0){
-			echo "startElastest-- Timeout while wait for ETM started"
-			start_elastest_result = -1
-			break
-		}
-		sh script: 'docker ps', returnStatus: true
-		condition = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
-		echo '\t startElastest-- Condition: '+condition
-	}
-	
-	echo 'startElastest-- start_elastest_result='+start_elastest_result
-	
-	def elastest_is_running = false
-	
-	if (start_elastest_result == 0){
-		elastest_is_running = sh script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
-		echo 'startElastest-- elastest_is_running = '+ (elastest_is_running==0)
-	}
-	else {
-		echo 'startElastest-- stop platform as the etm has not been launched'
-		def stop_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop --forcepull --nocheck', returnStatus:true
-	}
-	
 	echo '[END] startElastest'
-	return (elastest_is_running==0)
+	return (start_elastest_result==0)
 }
 
-def checkETM(){
-	sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
-	sh 'ls -ltr ci-elastest-jenkins-lib/scripts '
-	def elastest_is_running = sh  script: 'python ci-elastest-jenkins-lib/scripts/checkETM.py', returnStatus:true
-	
+def elastestIsRunning(){
+	def platform_state = sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
+	def etm_state = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
+	return (platform_state==0 && etm_state==0)
+}
+
+def waitElastest(){
+	echo '[INI] checkElastest'
+	def elastest_is_running = sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait', returnStatus:true
 	return (elastest_is_running == 0)
+	echo '[END] checkElastest'
 }
 
 def stopElastest(){
+	echo '[INI] stopElastest'
 	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop  --forcepull --nocheck', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result	
+	echo '[END] stopElastest'
 }
 
+def getAPI(){
+	echo '[INI] getAPI'
+	def get_api = sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api', returnStatus:true
+	echo '[END] getAPI'
+}
 
 def call(body) {
+	echo '[INI] Main body of the library'
 	def config = [:] //values for configure the job
 					 //in a future version of the components? by default latest
 					 // 
@@ -79,26 +58,27 @@ def call(body) {
 		node ('sharedElastest'){
 			stage ('launch elastest' )			
 				echo "sharedElastest = ${SHARED_ELASTEST}"
-				echo ('retrieve scripts')
-				
-				sh 'if cd ci-elastest-jenkins-lib; then git pull; else git clone https://github.com/elastest/ci-elastest-jenkins-lib.git ci-elastest-jenkins-lib; fi'
-				
-				def elastest_is_running = checkETM()
+								
+				def elastest_is_running = elastestIsRunning()
 				echo "elastest_is_running? "+ elastest_is_running
 				
 				if (!elastest_is_running){
 					echo 'ElasTest is not running...'
 					echo 'START Shared ElasTest'
-					elastest_is_running = startElastest()
+					startElastest()
+					elastest_is_running = waitElastest()
 					if (! elastest_is_running){
 						currentBuild.result = 'FAILURE'
+						return
 					}
 				}
 				else {
 					echo 'TODO: provide elastest feedback'
 				}
 			//body of the pipeline
+			echo '[INI] User stages'
 			body();	
+			echo '[END] User stages'
 			
 			stage ('release elastest')
 				echo ('Shared elastest wont be ende because other jobs would be using it')
@@ -108,17 +88,30 @@ def call(body) {
 		node('commonE2E'){
 			stage ('launch elastest')
 				echo "sharedElastest = ${SHARED_ELASTEST}"
-				def elastest_is_running = startElastest()
-				if (! elastest_is_running){
+				def elastest_is_running = elastestIsRunning()
+				if (elastest_is_running){ //stop and start again --> elastest is unique and fresh with each start
+					stopElastest()
+					sleep(10)
+					elastest_is_running = elastestIsRunning()
+					if (elastest_is_running){
 						currentBuild.result = 'FAILURE'
+						return
+					}	
 				}
-				echo ('TODO: provide elastest feedback')
-				
+				startElastest()
+				elastest_is_running = waitElastest()
+				if (! elastest_is_running){
+					currentBuild.result = 'FAILURE'
+					return
+				}
 			//body of the pipeline	
-			body();
+			echo '[INI] User stages'
+			body();	
+			echo '[END] User stages'
 			
 			stage ('release elastest')
 				stopElastest()
 		}
 	}
+	echo '[END] Main body of the library'
 }
