@@ -18,16 +18,18 @@ def startElastest(){
 }
 
 def elastestIsRunning(){
+	echo '[INI] elastestIsRunning'
 	def platform_state = sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
 	def etm_state = sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
+	echo '[END] elastestIsRunning'
 	return (platform_state==0 && etm_state==0)
 }
 
 def waitElastest(){
 	echo '[INI] waitElastest'
 	def elastest_is_running = sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait', returnStatus:true
-	return (elastest_is_running == 0)
 	echo '[END] waitElastest'
+	return (elastest_is_running == 0)
 }
 
 def stopElastest(){
