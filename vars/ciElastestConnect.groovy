@@ -10,7 +10,7 @@ def startElastest(){
 		little = '--lite'
 	}
 	
-	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start  --forcepull --nocheck '+ little, returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start --forcepull'+ little, returnStatus:true
 	echo 'startElastest-- start_elastest_result = '+start_elastest_result
 	
 	echo '[END] startElastest'
@@ -32,7 +32,7 @@ def waitElastest(){
 
 def stopElastest(){
 	echo '[INI] stopElastest'
-	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop  --forcepull --nocheck', returnStatus:true
+	def start_elastest_result = sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop', returnStatus:true
 	echo 'start_elastest_result = '+start_elastest_result	
 	echo '[END] stopElastest'
 }
