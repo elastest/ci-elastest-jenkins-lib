@@ -93,6 +93,7 @@ def call(body) {
 					stopElastest()
 					sleep(10)
 					elastest_is_running = elastestIsRunning()
+					echo 'elastest_is_running:'+elastest_is_running
 					if (elastest_is_running){
 						currentBuild.result = 'FAILURE'
 						return
@@ -100,6 +101,8 @@ def call(body) {
 				}
 				startElastest()
 				elastest_is_running = waitElastest()
+				elastest_is_running = elastestIsRunning()
+				echo 'elastest_is_running:'+elastest_is_running
 				if (! elastest_is_running){
 					currentBuild.result = 'FAILURE'
 					return
