@@ -24,10 +24,10 @@ def elastestIsRunning(){
 }
 
 def waitElastest(){
-	echo '[INI] checkElastest'
+	echo '[INI] waitElastest'
 	def elastest_is_running = sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait', returnStatus:true
 	return (elastest_is_running == 0)
-	echo '[END] checkElastest'
+	echo '[END] waitElastest'
 }
 
 def stopElastest(){
@@ -67,7 +67,7 @@ def call(body) {
 					echo 'START Shared ElasTest'
 					startElastest()
 					elastest_is_running = waitElastest()
-					sh script: 'docker ps | grep elastest_', returnStatus:true
+					def return_status = sh script: 'docker ps | grep elastest_', returnStatus:true
 					if (! elastest_is_running){
 						currentBuild.result = 'FAILURE'
 						return
@@ -102,7 +102,7 @@ def call(body) {
 				}
 				startElastest()
 				elastest_is_running = waitElastest()
-				sh script: 'docker ps | grep elastest_', returnStatus:true
+				def return_status = sh script: 'docker ps | grep elastest_', returnStatus:true
 				echo 'elastest_is_running:'+elastest_is_running
 				if (! elastest_is_running){
 					currentBuild.result = 'FAILURE'
