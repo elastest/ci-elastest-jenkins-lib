@@ -50,7 +50,7 @@ class elastest implements Serializable {
 	}
 	
 	def elastest_pipeline(body) {
-		echo '[INI] Main body of the library'
+		
 		def config = [:] //values for configure the job
 						 //in a future version of the components? by default latest
 						 // 
@@ -137,7 +137,6 @@ class elastest implements Serializable {
 					stopElastest()
 			}
 		}
-		echo '[END] Main body of the library'
 	}
 	
 	def echo (String str){
