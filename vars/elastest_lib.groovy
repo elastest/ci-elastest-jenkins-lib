@@ -108,12 +108,10 @@ class elastest_lib implements Serializable {
 		Url: http://172.18.0.19:8091
 		*/
 		
-		def (ignore, val) = get_api.tokenize( 'Url:' )
-		echo 'val: '+val
-		def (ignore1, val1) = val.tokenize( '//' )
-		def (_ip, _port) = val1.tokenize(':')
-		this.@ip = _ip
-		this.@port = _port
+		def strings = get_api.tokenize( ':' )
+		
+		this.@ip = strings[strings.lenght-2]
+		this.@port = strings[strings.lenght-1]
 		echo '[END] getAPI <ip:port> =>' +this.@ip+":"+this.@port
 	}
 	
@@ -152,7 +150,7 @@ class elastest_lib implements Serializable {
 							
 						def return_status = this.@ctx.sh script: 'docker ps | grep elastest_', returnStatus:true
 						if (! elastest_is_running){
-							currentBuild.result = 'FAILURE'
+							this.@ctx.currentBuild.result = 'FAILURE'
 							return
 						}
 						else {
@@ -197,7 +195,7 @@ class elastest_lib implements Serializable {
 					}
 
 					if (! elastest_is_running){
-						currentBuild.result = 'FAILURE'
+						this.@ctx.currentBuild.result = 'FAILURE'
 						return
 					}
 					else {
