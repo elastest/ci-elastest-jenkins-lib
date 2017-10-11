@@ -60,10 +60,10 @@ class elastest implements Serializable {
 		//check the execution ${this.ctx.sharedElastest}
 			
 			
-		if ( "$SHARED_ELASTEST" == 'true' ){
+		if ( this.@shared == true ){
 			node ('this.ctx.sharedElastest'){
 				stage ('launch elastest' )			
-					echo "sharedElastest = ${SHARED_ELASTEST}"
+					echo "sharedElastest ="+this.@shared
 									
 					def elastest_is_running = elastestIsRunning()
 					echo "elastest_is_running? "+ elastest_is_running
@@ -102,7 +102,7 @@ class elastest implements Serializable {
 		else {
 			node('commonE2E'){
 				stage ('launch elastest')
-					echo "sharedElastest = ${SHARED_ELASTEST}"
+					echo "sharedElastest ="+this.@shared
 					def elastest_is_running = elastestIsRunning()
 					if (elastest_is_running){ //stop and start again --> elastest is unique and frethis.ctx.sh with each start
 						stopElastest()
