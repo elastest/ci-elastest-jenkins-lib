@@ -43,7 +43,7 @@ class elastest implements Serializable {
 		echo '[END] stopElastest'
 	}
 
-	def getAPI(){
+	def getApi(default = 'default'){
 		echo '[INI] getAPI'
 		def get_api = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api', returnStatus:true
 		echo '[END] getAPI'
