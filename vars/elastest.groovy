@@ -1,18 +1,40 @@
 //With classes
-class elastest implements Serializable {
+class elastest_lib implements Serializable {
+	
+	//info of the ElasTest
 	private String ip
-	private boolean shared
-	private String lite
+	private String port
+	
+	//parameters for the ElasTest
+	private boolean shared = false
+	private String lite = ''
 	def ctx
 	
-	def setLite(String value) {this.@lite = value}
-	
-	def setShared(String value) {this.@shared = value}
-	
+	/*
+	*	Initialization of the context. It is mandatory for the correct usage of the library
+	*/
 	def setContext(value){this.@ctx = value}
 	
-	def getThis(){return this}
+	/*
+	*	Initialization of the parameter Lite just for personalization for normal execution leave empty
+	*	for lite execution initialize with '--lite'
+	*/
+	def setLite(String value) {this.@lite = value}
+
+	/*
+	*	Initialization of the shared ElasTest for multiple jobs
+	*/
+	def setShared(String value) {this.@shared = value}
+		
+	/*
+	*	When using methods of this library inside any provided step should be called through the 
+	*	returned object by this method
+	*/
+	def getElastestMethods(){return this}
 	
+	/*
+	*	Start elastest if it is not running
+	*/
 	def startElastest(){
 		echo '[INI] startElastest'
 		
@@ -23,6 +45,9 @@ class elastest implements Serializable {
 		return (start_elastest_result==0)
 	}
 	
+	/*
+	*	Check if ElasTest is running (platform and etm)
+	*/
 	def elastestIsRunning(){
 		echo '[INI] elastestIsRunning'
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
@@ -31,6 +56,9 @@ class elastest implements Serializable {
 		return (platform_state==0 && etm_state==0)
 	}
 
+	/*
+	*	Wait for Elastest to run (unconfigurable, just the provided wait in the toolbox)
+	*/
 	def waitElastest(){
 		echo '[INI] waitElastest'
 		def elastest_is_running = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait', returnStatus:true
@@ -38,19 +66,29 @@ class elastest implements Serializable {
 		return (elastest_is_running == 0)
 	}
 
+	/*
+	*	StopElastest if it's running
+	*/
 	def stopElastest(){
 		echo '[INI] stopElastest'
 		def start_elastest_result = this.@ctx.sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop', returnStatus:true
 		echo 'start_elastest_result = '+start_elastest_result	
 		echo '[END] stopElastest'
 	}
+	
+	/*
+	*	Get the API
+	*/
 	def getApi(){
 		echo '[INI] getAPI'
 		def get_api = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api', returnStatus:true
 		echo '[END] getAPI'
 	}
 	
-	def elastest_pipeline(body) {
+	/*
+	*	predefined pipeline for executing e2e test over a managed ElasTest platform
+	*/
+	def pipeline(body) {
 		
 		def config = [:] //values for configure the job
 						 //in a future version of the components? by default latest
@@ -138,12 +176,11 @@ class elastest implements Serializable {
 		}
 	}
 	
+	/*
+	*	Override for echo as if not accessed in the context doesn't work
+	*/
 	def echo (String str){
 		this.@ctx.sh 'echo '+str
-	}
-	
-	def node(String tag){
-	
 	}
 	
 }
