@@ -2,20 +2,6 @@
 * Method to start ElasTest with the default method: docker image.
 * In case that some arises the method will try to stop all the ElasTest components that had been started
 */
-def startElastest(){
-	echo '[INI] startElastest'
-
-	def lite = ''
-	if ("$ELASTEST_LITE"=='true'){
-		lite = '--lite'
-	}
-	
-	def start_elastest_result = sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start --forcepull '+ lite, returnStatus:true
-	echo 'startElastest-- start_elastest_result = '+start_elastest_result
-	
-	echo '[END] startElastest'
-	return (start_elastest_result==0)
-}
 
 def elastestIsRunning(){
 	echo '[INI] elastestIsRunning'
