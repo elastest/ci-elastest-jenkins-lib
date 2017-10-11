@@ -4,9 +4,9 @@ class elastest implements Serializable {
 	private boolean shared
 	private String lite
 	
-	def setShared(value){
-		shared = value
-	}
+	def setLite(String value) {this.@lite = value}
+	
+	def setShared(String value) {this.@shared = value}
 	
 	def startElastest(){
 		echo '[INI] startElastest'
