@@ -96,8 +96,20 @@ class elastest_lib implements Serializable {
 	def getApi(){
 		echo '[INI] getAPI'
 		def get_api = this.@ctx.sh script: 'echo $(docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api)', returnStdout:true
+		//this is valid for output:
+		/*
+		Waiting for ETM...
+		Platform inserted into network succesfully
+
+		Container created with IP: 172.18.0.19
+		ETM is ready in http://172.18.0.19:8091
+
+		ElasTest API info:
+		Url: http://172.18.0.19:8091
+		*/
+		
 		def (ignore, val) = get_api.tokenize( 'Url:' )
-		def (ignore, val1) = val.tokenize( '//' )
+		def (ignore1, val1) = val.tokenize( '//' )
 		def (_ip, _port) = val1.tokenize(':')
 		this.@ip = _ip
 		this.@port = _port
