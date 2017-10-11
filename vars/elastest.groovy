@@ -58,8 +58,8 @@ class elastest implements Serializable {
 		body.delegate = config
 		println ("BODY: "+this.@shared)
 		
-		if ( this.@shared == true ){
-			this.@ctx.node ('this.@ctx.sharedElastest'){
+		if (this.@shared == true ){
+			this.@ctx.node ('sharedElastest'){
 				this.@ctx.stage ('launch elastest' )			
 					echo "sharedElastest ="+this.@shared
 									
