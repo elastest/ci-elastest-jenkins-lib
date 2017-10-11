@@ -13,27 +13,39 @@ class elastest_lib implements Serializable {
 	/*
 	*	Initialization of the context. It is mandatory for the correct usage of the library
 	*/
-	def setContext(value){this.@ctx = value}
+	def setContext(value){ this.@ctx = value }
 	
 	/*
 	*	Initialization of the parameter Lite just for personalization for normal execution leave empty
 	*	for lite execution initialize with '--lite'
 	*/
-	def setLite(String value) {this.@lite = value}
+	def setLite(String value) { this.@lite = value }
 
 	/*
 	*	Initialization of the shared ElasTest for multiple jobs
 	*/
-	def setShared(String value) {this.@shared = value}
-		
+	def setShared(String value) { this.@shared = value }
+	
+	/*
+	*	@return elastest_ip
+	*/
+	def getIp() { return this.@ip }
+
+	/*
+	*	@return elastest_port
+	*/
+	def getPort() { return this.@port }
+	
 	/*
 	*	When using methods of this library inside any provided step should be called through the 
 	*	returned object by this method
+	*	@return this object (executable library)
 	*/
-	def getElastestMethods(){return this}
+	def getElastestMethods(){ return this }
 	
 	/*
 	*	Start elastest if it is not running
+	*	@return boolean
 	*/
 	def startElastest(){
 		echo '[INI] startElastest'
@@ -47,6 +59,7 @@ class elastest_lib implements Serializable {
 	
 	/*
 	*	Check if ElasTest is running (platform and etm)
+	*	@return boolean
 	*/
 	def elastestIsRunning(){
 		echo '[INI] elastestIsRunning'
@@ -58,6 +71,7 @@ class elastest_lib implements Serializable {
 
 	/*
 	*	Wait for Elastest to run (unconfigurable, just the provided wait in the toolbox)
+	*	@return boolean
 	*/
 	def waitElastest(){
 		echo '[INI] waitElastest'
@@ -81,8 +95,13 @@ class elastest_lib implements Serializable {
 	*/
 	def getApi(){
 		echo '[INI] getAPI'
-		def get_api = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api', returnStatus:true
-		echo '[END] getAPI'
+		def get_api = this.@ctx.sh script: 'echo $(docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api)', returnStdout:true
+		def (ignore, val) = get_api.tokenize( 'Url:' )
+		def (ignore, val1) = val.tokenize( '//' )
+		def (_ip, _port) = val1.tokenize(':')
+		this.@ip = _ip
+		this.@port = _port
+		echo '[END] getAPI <ip:port> =>' +this.@ip+":"+this.@port
 	}
 	
 	/*
@@ -122,6 +141,9 @@ class elastest_lib implements Serializable {
 						if (! elastest_is_running){
 							currentBuild.result = 'FAILURE'
 							return
+						}
+						else {
+							getApi()
 						}
 					}
 					else {
@@ -165,6 +187,10 @@ class elastest_lib implements Serializable {
 						currentBuild.result = 'FAILURE'
 						return
 					}
+					else {
+							getApi()
+					}
+					
 				//body of the pipeline	
 				echo '[INI] User stages'
 				body();	
