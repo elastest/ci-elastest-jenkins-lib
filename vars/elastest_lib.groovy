@@ -1,5 +1,7 @@
 //With classes
 class elastest_lib implements Serializable {
+	//configuration of the library
+	private boolean verbose = false
 	
 	//info of the ElasTest
 	private String ip
@@ -10,6 +12,12 @@ class elastest_lib implements Serializable {
 	private String lite = ''
 	def ctx
 	
+	
+	/*
+	*	Initialization of the verbose parameter for the ElasTest
+	*/
+	def setVerbose( boolean value) { this.@verbose = value }
+	
 	/*
 	*	Initialization of the context. It is mandatory for the correct usage of the library
 	*/
@@ -19,12 +27,12 @@ class elastest_lib implements Serializable {
 	*	Initialization of the parameter Lite just for personalization for normal execution leave empty
 	*	for lite execution initialize with '--lite'
 	*/
-	def setLite(String value) { this.@lite = value }
+	def setLite( String value) { this.@lite = value }
 
 	/*
 	*	Initialization of the shared ElasTest for multiple jobs
 	*/
-	def setShared(String value) { this.@shared = value }
+	def setShared( boolean value) { this.@shared = value }
 	
 	/*
 	*	@return elastest_ip
@@ -216,7 +224,11 @@ class elastest_lib implements Serializable {
 	*	Override for echo as if not accessed in the context doesn't work
 	*/
 	def echo (String str){
-		this.@ctx.sh 'echo '+str
+		if (verbose ){
+			this.@ctx.sh 'echo '+str
+		}
+		//else doesnt write nothing...  
+			
 	}
 	
 }
