@@ -107,12 +107,11 @@ class elastest_lib implements Serializable {
 		ElasTest API info:
 		Url: http://172.18.0.19:8091
 		*/
-		echo 'get_api result'+ get_api
 		
 		def strings = get_api.tokenize( ':' )
 		
-		this.@ip = strings[strings.lenght-2]
-		this.@port = strings[strings.lenght-1]
+		this.@ip = strings[strings.size()-2]
+		this.@port = strings[strings.size()-1]
 		echo '[END] getAPI <ip:port> =>' +this.@ip+":"+this.@port
 	}
 	
