@@ -117,7 +117,7 @@ class elastest_lib implements Serializable {
 		*/
 		
 		def strings = get_api.tokenize( ':' )
-		this.@ip = strings[strings.size()-2].replaceAll("\\\\",'')
+		this.@ip = strings[strings.size()-2].replaceAll("/",'')
 		this.@port = strings[strings.size()-1]
 		echo '[END] getAPI  ip:port ' +this.@ip+':'+this.@port
 	}
