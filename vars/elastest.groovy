@@ -7,7 +7,7 @@ class elastest implements Serializable {
 	
 	def setLite(String value) {this.@lite = value}
 	
-	def setShared(String value) {this.@this.ctx.shared = value}
+	def setShared(String value) {this.@shared = value}
 	
 	def setContext(value){this.@ctx = value}
 	
@@ -63,7 +63,7 @@ class elastest implements Serializable {
 		if ( "$SHARED_ELASTEST" == 'true' ){
 			node ('this.ctx.sharedElastest'){
 				stage ('launch elastest' )			
-					echo "this.ctx.sharedElastest = ${SHARED_ELASTEST}"
+					echo "sharedElastest = ${SHARED_ELASTEST}"
 									
 					def elastest_is_running = elastestIsRunning()
 					echo "elastest_is_running? "+ elastest_is_running
@@ -102,7 +102,7 @@ class elastest implements Serializable {
 		else {
 			node('commonE2E'){
 				stage ('launch elastest')
-					echo "this.ctx.sharedElastest = ${SHARED_ELASTEST}"
+					echo "sharedElastest = ${SHARED_ELASTEST}"
 					def elastest_is_running = elastestIsRunning()
 					if (elastest_is_running){ //stop and start again --> elastest is unique and frethis.ctx.sh with each start
 						stopElastest()
