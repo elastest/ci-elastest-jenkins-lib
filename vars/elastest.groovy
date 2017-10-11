@@ -1,7 +1,7 @@
 //With classes
 class elastest implements Serializable {
 	private String ip
-	private boolean this.ctx.shared
+	private boolean shared
 	private String lite
 	def ctx
 	
