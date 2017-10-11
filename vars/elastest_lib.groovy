@@ -112,7 +112,7 @@ class elastest_lib implements Serializable {
 		
 		this.@ip = strings[strings.size()-2]
 		this.@port = strings[strings.size()-1]
-		echo '[END] getAPI <ip:port> ' +this.@ip+':'+this.@port
+		echo '[END] getAPI  ip:port ' +this.@ip+':'+this.@port
 	}
 	
 	/*
