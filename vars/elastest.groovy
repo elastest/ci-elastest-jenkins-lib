@@ -11,6 +11,8 @@ class elastest implements Serializable {
 	
 	def setContext(value){this.@ctx = value}
 	
+	def getThis(){return this}
+	
 	def startElastest(){
 		echo '[INI] startElastest'
 		
