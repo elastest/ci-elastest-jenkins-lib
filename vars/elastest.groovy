@@ -61,8 +61,8 @@ class elastest implements Serializable {
 			
 			
 		if ( this.@shared == true ){
-			node ('this.ctx.sharedElastest'){
-				stage ('launch elastest' )			
+			this.ctx.node ('this.ctx.sharedElastest'){
+				this.ctx.stage ('launch elastest' )			
 					echo "sharedElastest ="+this.@shared
 									
 					def elastest_is_running = elastestIsRunning()
@@ -95,13 +95,13 @@ class elastest implements Serializable {
 				body();	
 				echo '[END] User stages'
 				
-				stage ('release elastest')
+				this.ctx.stage ('release elastest')
 					echo ('Shared elastest wont be ende because other jobs would be using it')
 			}
 		}
 		else {
-			node('commonE2E'){
-				stage ('launch elastest')
+			this.ctx.node('commonE2E'){
+				this.ctx.stage ('launch elastest')
 					echo "sharedElastest ="+this.@shared
 					def elastest_is_running = elastestIsRunning()
 					if (elastest_is_running){ //stop and start again --> elastest is unique and frethis.ctx.sh with each start
@@ -133,7 +133,7 @@ class elastest implements Serializable {
 				body();	
 				echo '[END] User stages'
 				
-				stage ('release elastest')
+				this.ctx.stage ('release elastest')
 					stopElastest()
 			}
 		}
