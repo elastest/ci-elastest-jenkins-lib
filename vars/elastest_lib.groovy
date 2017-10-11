@@ -109,6 +109,7 @@ class elastest_lib implements Serializable {
 		*/
 		
 		def (ignore, val) = get_api.tokenize( 'Url:' )
+		echo 'val: '+val
 		def (ignore1, val1) = val.tokenize( '//' )
 		def (_ip, _port) = val1.tokenize(':')
 		this.@ip = _ip
