@@ -181,7 +181,7 @@ class elastest_lib implements Serializable {
 						elastest_is_running = elastestIsRunning()
 						echo 'elastest_is_running:'+elastest_is_running
 						if (elastest_is_running){
-							currentBuild.result = 'FAILURE'
+							this.@ctx.currentBuild.result = 'FAILURE'
 							return
 						}	
 					}
