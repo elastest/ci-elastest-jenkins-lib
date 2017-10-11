@@ -56,10 +56,8 @@ class elastest implements Serializable {
 						 // 
 		body.resolveStrategy = Closure.DELEGATE_FIRST
 		body.delegate = config
+		println ("BODY: "+this.@shared)
 		
-		//check the execution ${this.ctx.sharedElastest}
-			
-			
 		if ( this.@shared == true ){
 			this.ctx.node ('this.ctx.sharedElastest'){
 				this.ctx.stage ('launch elastest' )			
@@ -141,6 +139,10 @@ class elastest implements Serializable {
 	
 	def echo (String str){
 		this.ctx.sh 'echo '+str
+	}
+	
+	def node(String tag){
+	
 	}
 	
 }
