@@ -45,6 +45,11 @@ class elastest_lib implements Serializable {
 	def getPort() { return this.@port }
 	
 	/*
+	*	@ return full conection url for torm
+	*/
+	def getEtmUrl() { return 'http://'+this.@ip+':'+this.@port }
+	
+	/*
 	*	When using methods of this library inside any provided step should be called through the 
 	*	returned object by this method
 	*	@return this object (executable library)
