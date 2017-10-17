@@ -10,6 +10,8 @@ class elastest_lib implements Serializable {
 	//parameters for the ElasTest
 	private boolean shared = false
 	private String lite = ''
+	private String version='latest'
+	
 	def ctx
 	
 	
@@ -63,7 +65,7 @@ class elastest_lib implements Serializable {
 	def startElastest(){
 		echo '[INI] startElastest'
 		
-		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform start --pullcore '+ lite, returnStatus:true
+		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' start --pullcore '+ lite, returnStatus:true
 		echo 'startElastest-- start_elastest_result = '+start_elastest_result
 		
 		echo '[END] startElastest'
@@ -77,7 +79,7 @@ class elastest_lib implements Serializable {
 	def elastestIsRunning(){
 		echo '[INI] elastestIsRunning'
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
-		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait --running=0 ', returnStatus:true
+		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --running=0 ', returnStatus:true
 		echo '[END] elastestIsRunning'
 		return (platform_state==0 && etm_state==0)
 	}
@@ -88,7 +90,7 @@ class elastest_lib implements Serializable {
 	*/
 	def waitElastest(){
 		echo '[INI] waitElastest'
-		def elastest_is_running = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait --container=900', returnStatus:true
+		def elastest_is_running = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --container=900', returnStatus:true
 		echo '[END] waitElastest'
 		return (elastest_is_running == 0)
 	}
@@ -98,7 +100,7 @@ class elastest_lib implements Serializable {
 	*/
 	def stopElastest(){
 		echo '[INI] stopElastest'
-		def start_elastest_result = this.@ctx.sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform stop', returnStatus:true
+		def start_elastest_result = this.@ctx.sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' stop', returnStatus:true
 		echo 'start_elastest_result = '+start_elastest_result	
 		echo '[END] stopElastest'
 	}
@@ -108,7 +110,7 @@ class elastest_lib implements Serializable {
 	*/
 	def getApi(){
 		echo '[INI] getAPI'
-		def get_api = this.@ctx.sh script: 'echo $(docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform inspect --api)', returnStdout:true
+		def get_api = this.@ctx.sh script: 'echo $(docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' inspect --api)', returnStdout:true
 		//this is valid for output:
 		/*
 		Waiting for ETM...
