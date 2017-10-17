@@ -23,7 +23,7 @@ class elastest_lib implements Serializable {
 	/*
 	*	Initialization of the version parameter for the ElasTest
 	*/
-	def setVersion( boolean value) { this.@version = value }
+	def setVersion( String value) { this.@version = value }
 	
 	/*
 	*	Initialization of the context. It is mandatory for the correct usage of the library
