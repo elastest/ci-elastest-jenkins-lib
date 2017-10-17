@@ -47,6 +47,20 @@ elastest_lib.pipeline({
 })
 ```
 
+Configuration options
+-----------------------
+The following properties can be configured in order to grant a more accurate ElasTest platform
+* 	*shared* used only for administration testing jobs. 
+	**	Default value: _false_
+	** Setter: _elastest_lib.setShared(true/false)_
+*	*lite*: if the job should be executed with the lite version of elastest.
+	** Default value: _""_ 
+	** Setter: _elastest_lib.setLite("--lite"/"")_ 
+*	*version* is the defined version of the elastest that should be used.
+	** Default value: _"latest"_
+	** Setter: _elastest_lib.setLite("20171017")_ 
+
+
 API
 ----------------
 
