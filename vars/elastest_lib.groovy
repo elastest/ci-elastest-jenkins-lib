@@ -72,7 +72,7 @@ class elastest_lib implements Serializable {
 	def elastestIsRunning(){
 		echo '[INI] elastestIsRunning'
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
-		def etm_state = this.@ctx.sh script: 'docker ps | grep etm_1 | grep -c Up', returnStatus:true
+		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait --running=0 ', returnStatus:true
 		echo '[END] elastestIsRunning'
 		return (platform_state==0 && etm_state==0)
 	}
@@ -83,7 +83,7 @@ class elastest_lib implements Serializable {
 	*/
 	def waitElastest(){
 		echo '[INI] waitElastest'
-		def elastest_is_running = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait', returnStatus:true
+		def elastest_is_running = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform wait --container=900', returnStatus:true
 		echo '[END] waitElastest'
 		return (elastest_is_running == 0)
 	}
