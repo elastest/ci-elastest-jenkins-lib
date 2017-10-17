@@ -21,6 +21,11 @@ class elastest_lib implements Serializable {
 	def setVerbose( boolean value) { this.@verbose = value }
 	
 	/*
+	*	Initialization of the version parameter for the ElasTest
+	*/
+	def setVersion( boolean value) { this.@version = value }
+	
+	/*
 	*	Initialization of the context. It is mandatory for the correct usage of the library
 	*/
 	def setContext(value){ this.@ctx = value }

@@ -47,6 +47,15 @@ elastest_lib.pipeline({
 })
 ```
 
+API
+----------------
+
+The library provides some methods to interact with the ElasTest platform:
+* `elastest.getIP()` returns the ip of the ElasTest platform
+* `elastest.getPort()` returns the port of the Elastest platform
+* `elastest.getEtmUrl()` returns the conection chain for the etm.
+
+
 Important !!!
 ----------------
 Some instructions and plugins can't be executed in a straight forward way because the context of the pipeline
