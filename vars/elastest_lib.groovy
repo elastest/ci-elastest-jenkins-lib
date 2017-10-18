@@ -66,7 +66,7 @@ class elastest_lib implements Serializable {
 	/*
 	*	Connect container to elastest network
 	*/
-	def connect2ElastestNetwork( String containerid ){
+	def connect2ElastestNetwork(){
 		echo '[INI] connect2ElastestNetwork'
 		
 		containerId= sh (
