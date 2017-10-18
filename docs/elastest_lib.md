@@ -68,6 +68,7 @@ The library provides some methods to interact with the ElasTest platform:
 * `elastest.getIP()` returns the ip of the ElasTest platform
 * `elastest.getPort()` returns the port of the Elastest platform
 * `elastest.getEtmUrl()` returns the conection chain for the etm.
+* `elastest.connect2ElastestNetwork()` connects the running container with the elastest network. It is necessary for e2e tests running inside a custom container.
 
 
 Important !!!
