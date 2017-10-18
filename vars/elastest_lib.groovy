@@ -69,7 +69,7 @@ class elastest_lib implements Serializable {
 	def connect2ElastestNetwork(){
 		echo '[INI] connect2ElastestNetwork'
 		
-		containerId= this.@ctx.sh (
+		def containerId= this.@ctx.sh (
 			script: 'cat /proc/self/cgroup | grep "docker" | sed s/\\\\//\\\\n/g | tail -1',
 			returnStdout: true
 		).trim() 
