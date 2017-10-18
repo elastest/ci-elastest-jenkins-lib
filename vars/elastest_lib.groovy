@@ -64,6 +64,23 @@ class elastest_lib implements Serializable {
 	def getElastestMethods(){ return this }
 	
 	/*
+	*	Connect container to elastest network
+	*/
+	def connect2ElastestNetwork( String containerid ){
+		echo '[INI] connect2ElastestNetwork'
+		
+		containerId= sh (
+			script: 'cat /proc/self/cgroup | grep "docker" | sed s/\\\\//\\\\n/g | tail -1',
+			returnStdout: true
+		).trim() 
+		echo "containerId = ${containerId}"
+		sh "docker network connect elastest_elastest "+ containerId
+		
+		echo '[END] connect2ElastestNetwork'
+	}
+	
+	
+	/*
 	*	Start elastest if it is not running
 	*	@return boolean
 	*/
