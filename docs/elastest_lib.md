@@ -73,7 +73,7 @@ The library provides some methods to interact with the ElasTest platform:
 
 Important !!!
 ----------------
-Some instructions and plugins can't be executed in a straight forward way because the context of the pipeline
+1. Some instructions and plugins can't be executed in a straight forward way because the context of the pipeline
 is unreferenced in the library. 
 
 These instructions throws errors like the following:
@@ -94,6 +94,7 @@ This errors can be soved by referencing the appropriate context in the declarati
 def mycontainer = elastest.ctx.docker.image('...')
 ```
 
+2. In case that the tests executes inside a custom container (such as [elastest/ci-docker-e2e:latest](https://hub.docker.com/r/elastest/ci-docker-e2e/)) in order to grant connectivity with the elasTest `elastest.connect2ElastestNetwork()` should be called before the tests execution.
 
 
 [Apache 2.0 License]: http://www.apache.org/licenses/LICENSE-2.0
