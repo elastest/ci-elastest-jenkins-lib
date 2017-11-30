@@ -147,12 +147,11 @@ class elastest_lib implements Serializable {
 	def getApi(){
 		echo '[INI] getAPI'
 		
-		def etEmpApi= this.@ctx.sh (
+		def get_api= this.@ctx.sh (
                 script: 'docker inspect --format=\\"{{.NetworkSettings.Networks.elastest_elastest.Gateway}}\\" elastest_etm-proxy_1',
                 returnStdout: true
             ).trim()
         echo "ETM container IP=${etEmpApi}"
-		def get_api = this.@ctx.sh script: 'echo $(docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' inspect --api)', returnStdout:true
 		
 		//this is valid for output:
 		/*
