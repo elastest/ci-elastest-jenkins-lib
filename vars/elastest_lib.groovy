@@ -170,7 +170,7 @@ class elastest_lib implements Serializable {
 		this.@port = strings[strings.size()-1]
 		*/
 		this.@ip=get_api
-		
+		this.@ip = this.@ip.replaceAll('"','')
 		echo '[END] getAPI  ip:port ' +this.@ip+':'+this.@port
 	}
 	
