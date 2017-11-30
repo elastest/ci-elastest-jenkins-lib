@@ -151,7 +151,7 @@ class elastest_lib implements Serializable {
                 script: 'docker inspect --format=\\"{{.NetworkSettings.Networks.elastest_elastest.Gateway}}\\" elastest_etm-proxy_1',
                 returnStdout: true
             ).trim()
-        echo "ETM container IP=${etEmpApi}"
+        echo "ETM container IP=${get_api}"
 		
 		//this is valid for output:
 		/*
