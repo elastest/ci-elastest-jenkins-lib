@@ -53,9 +53,9 @@ The following properties can be configured in order to grant a more accurate Ela
 * 	__shared__ used only for administration testing jobs. 
 	*	Default value: _false_
 	* Setter: _elastest_lib.setShared(true/false)_
-*	__lite__ if the job should be executed with the lite version of elastest.
-	* Default value: _""_ 
-	* Setter: _elastest_lib.setLite("--lite"/"")_ 
+*	__mode__ the elastest mode
+	* Default value: _""_  (normal)
+	* Setter: _elastest_lib.setMode("experimental"/"experimental-lite"/"")_ 
 *	__version__ is the defined version of the elastest that should be used.
 	* Default value: _"latest"_
 	* Setter: _elastest_lib.setLite("20171017")_ 

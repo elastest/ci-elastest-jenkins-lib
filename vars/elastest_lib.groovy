@@ -3,13 +3,15 @@ class elastest_lib implements Serializable {
 	//configuration of the library
 	private boolean verbose = false
 	
+	private experimental = "--mode=experimental"
+	private experimental_lite = "--mode=experimental-lite"
 	//info of the ElasTest
 	private String ip
 	private String port
 	
 	//parameters for the ElasTest
 	private boolean shared = false
-	private String lite = ''
+	private String mode = '' //default normal
 	private String version='latest'
 	
 	def ctx
@@ -34,7 +36,14 @@ class elastest_lib implements Serializable {
 	*	Initialization of the parameter Lite just for personalization for normal execution leave empty
 	*	for lite execution initialize with '--lite'
 	*/
-	def setLite( String value) { this.@lite = value }
+	def setMode( String value) { 
+		if (value != null){
+			if (value=="experimental") this.@mode=experimental
+			else if (value=="experimental-lite") this.@mode=experimental_lite
+			else this.@mode=""
+		}
+		else this.@mode=""	
+	}
 
 	/*
 	*	Initialization of the shared ElasTest for multiple jobs
@@ -87,7 +96,7 @@ class elastest_lib implements Serializable {
 	def startElastest(){
 		echo '[INI] startElastest'
 		
-		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' start --pullcore '+ lite, returnStatus:true
+		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' start --pullcore '+ mode, returnStatus:true
 		echo 'startElastest-- start_elastest_result = '+start_elastest_result
 		
 		echo '[END] startElastest'
