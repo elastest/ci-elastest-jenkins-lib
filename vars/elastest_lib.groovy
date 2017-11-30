@@ -131,7 +131,12 @@ class elastest_lib implements Serializable {
 	*/
 	def stopElastest(){
 		echo '[INI] stopElastest'
-		def start_elastest_result = this.@ctx.sh script: 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' stop', returnStatus:true
+		def start_elastest_result = this.@ctx.sh script:sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' stop', returnStatus:true
+        try {
+            sh "docker rm -f elastest-platform"
+        }catch(e) {
+            echo "Error: $e"
+        }
 		echo 'start_elastest_result = '+start_elastest_result	
 		echo '[END] stopElastest'
 	}
@@ -141,7 +146,14 @@ class elastest_lib implements Serializable {
 	*/
 	def getApi(){
 		echo '[INI] getAPI'
+		
+		etEmpApi= sh (
+                script: 'docker inspect --format=\\"{{.NetworkSettings.Networks.elastest_elastest.Gateway}}\\" elastest_etm-proxy_1',
+                returnStdout: true
+            ).trim()
+        echo "ETM container IP=${etEmpApi}"
 		def get_api = this.@ctx.sh script: 'echo $(docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' inspect --api)', returnStdout:true
+		
 		//this is valid for output:
 		/*
 		Waiting for ETM...
