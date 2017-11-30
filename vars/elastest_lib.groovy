@@ -7,7 +7,7 @@ class elastest_lib implements Serializable {
 	private experimental_lite = "--mode=experimental-lite"
 	//info of the ElasTest
 	private String ip
-	private String port
+	private String port="37000"
 	
 	//parameters for the ElasTest
 	private boolean shared = false
@@ -165,9 +165,12 @@ class elastest_lib implements Serializable {
 		Url: http://172.18.0.19:8091
 		*/
 		
-		def strings = get_api.tokenize( ':' )
+		/*def strings = get_api.tokenize( ':' )
 		this.@ip = strings[strings.size()-2].replaceAll("/",'')
 		this.@port = strings[strings.size()-1]
+		*/
+		this.@ip=get_api
+		
 		echo '[END] getAPI  ip:port ' +this.@ip+':'+this.@port
 	}
 	
