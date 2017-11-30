@@ -96,7 +96,7 @@ class elastest_lib implements Serializable {
 	def startElastest(){
 		echo '[INI] startElastest'
 		
-		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' start --pullcore '+ mode, returnStatus:true
+		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' start --pullcore '+ this.@mode, returnStatus:true
 		echo 'startElastest-- start_elastest_result = '+start_elastest_result
 		
 		echo '[END] startElastest'
