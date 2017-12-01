@@ -177,13 +177,14 @@ class elastest_lib implements Serializable {
 		echo '[INI] stopElastest'
 		if (this.@shared){
 			def stop_elastest_result = this.@ctx.sh script:'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' stop', returnStatus:true
-			def stop_containers_result = this.@ctx.sh script:"docker rm -f $(docker ps -a -q) ", returnStatus:true
-			def delete_images_result = 	 this.@ctx.sh script:"docker rmi -f $(docker images -q)", returnStatus:true
-			def delete_volumes_result = this.@ctx.sh script: "docker volume rm -f $(docker volume ls)", returnStatus:true											
+			def stop_containers_result = this.@ctx.sh script:"docker ps -q |xargs docker rm ", returnStatus:true
+			def delete_images_result = 	 this.@ctx.sh script:"docker images -q |xargs docker rmi -f ", returnStatus:true
+			def delete_volumes_result = this.@ctx.sh script: "docker volume ls |xargs docker volume rm -f", returnStatus:true											
 			echo 'stop_elastest_result = '+(stop_elastest_result &&	stop_containers_result && stop_containers_result && delete_images_result && delete_volumes_result)
 		}		
 		echo '[END] stopElastest'
 	}
+
 	
 	/*
 	*	Get the API
