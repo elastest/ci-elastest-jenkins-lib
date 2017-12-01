@@ -92,7 +92,8 @@ class elastest_lib implements Serializable {
 				return 0
 				
 			} catch (Exception e) {
-				echo '[END] testRemoteElastest'
+				
+				echo '[END] FAILED: testRemoteElastest '+e
 				return 1
 			}
 		}
