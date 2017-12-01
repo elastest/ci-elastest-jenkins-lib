@@ -9,6 +9,8 @@ class elastest_lib implements Serializable {
 	private String ip
 	private String port="37000"
 	
+	private String sharedElastest_ip = sharedElastest_ip
+	
 	//parameters for the ElasTest
 	private boolean shared = false
 	private String mode = '' //default normal
@@ -56,7 +58,7 @@ class elastest_lib implements Serializable {
 	*/
 	def getIp() { 
 		if (this.@shared == true )
-			return $SHARED_ELASTEST_IP
+			return sharedElastest_ip
 	return this.@ip }
 
 	/*
@@ -69,7 +71,7 @@ class elastest_lib implements Serializable {
 	*/
 	def getEtmUrl() { 
 		if (this.@shared == true )
-				return 'http://'+$SHARED_ELASTEST_IP+':'+this.@port  
+				return 'http://'+sharedElastest_ip+':'+this.@port  
 		return 'http://'+this.@ip+':'+this.@port 
 	}
 	
@@ -87,7 +89,7 @@ class elastest_lib implements Serializable {
 	def testRemoteElastest(){
 		try {  
 				echo '[INI] testRemoteElastest'			
-				new URL('http://'+SHARED_ELASTEST_IP+':'+this.@port).getText()
+				new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
 				echo '[END] testRemoteElastest'
 				return 0
 				
@@ -220,7 +222,7 @@ class elastest_lib implements Serializable {
 			echo '[END] getAPI  ip:port ' +this.@ip+':'+this.@port
 		}
 		else {
-			echo '[END] getAPI  ip:port ' +$SHARED_ELASTEST_IP+':'+this.@port
+			echo '[END] getAPI  ip:port ' +sharedElastest_ip+':'+this.@port
 		}
 	}
 	
