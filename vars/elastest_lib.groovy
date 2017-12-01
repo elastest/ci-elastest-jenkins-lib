@@ -88,8 +88,10 @@ class elastest_lib implements Serializable {
 	*/
 	def testRemoteElastest(){
 		try {  
-				echo '[INI] testRemoteElastest'			
+				echo '[INI] testRemoteElastest'		
+				echo 'URL(http://'+sharedElastest_ip+':'+this.@port+').getText()'				
 				new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
+				
 				echo '[END] testRemoteElastest'
 				return 0
 				
