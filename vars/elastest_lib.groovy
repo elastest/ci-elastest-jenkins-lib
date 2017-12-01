@@ -55,7 +55,7 @@ class elastest_lib implements Serializable {
 	*	@return elastest_ip
 	*/
 	def getIp() { 
-		if (this.@shared)
+		if (this.@shared == true )
 			return $SHARED_ELASTEST_IP
 	return this.@ip }
 
@@ -68,7 +68,7 @@ class elastest_lib implements Serializable {
 	*	@ return full conection url for torm
 	*/
 	def getEtmUrl() { 
-		if (this.@shared)
+		if (this.@shared == true )
 				return 'http://'+$SHARED_ELASTEST_IP+':'+this.@port  
 		return 'http://'+this.@ip+':'+this.@port 
 	}
@@ -139,7 +139,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] elastestIsRunning'
 		def elastest_state = false
 		
-		if (this.@shared){
+		if (this.@shared == true ){
 			def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
 			def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --running=0 ', returnStatus:true
 			elastest_state = (platform_state==0 && etm_state==0)
@@ -160,7 +160,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] elastestIsRunning'
 		def elastest_is_running = false
 		
-		if (this.@shared){
+		if (this.@shared == true ){
 			elastest_is_running = this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --container=900', returnStatus:true
 		}
 		else {
@@ -175,7 +175,7 @@ class elastest_lib implements Serializable {
 	*/
 	def stopElastest(){
 		echo '[INI] stopElastest'
-		if (this.@shared){
+		if (this.@shared == true ){
 			def stop_elastest_result = this.@ctx.sh script:'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' stop', returnStatus:true
 			def stop_containers_result = this.@ctx.sh script:"docker ps -q |xargs docker rm ", returnStatus:true
 			def delete_images_result = 	 this.@ctx.sh script:"docker images -q |xargs docker rmi -f ", returnStatus:true
@@ -191,7 +191,7 @@ class elastest_lib implements Serializable {
 	*/
 	def getApi(){
 		echo '[INI] getAPI'
-		if (this.@shared){
+		if (this.@shared == true ){
 			def get_api= this.@ctx.sh (
 					script: 'docker inspect --format=\\"{{.NetworkSettings.Networks.elastest_elastest.Gateway}}\\" elastest_etm-proxy_1',
 					returnStdout: true
