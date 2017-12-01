@@ -235,54 +235,54 @@ class elastest_lib implements Serializable {
 		body.delegate = config
 		
 		if (this.@shared == true ){
-			this.@ctx.node ('sharedElastest'){
-				this.@ctx.stage ('launch elastest' )			
-					echo "sharedElastest ="+this.@shared
-									
-					def elastest_is_running = elastestIsRunning()
-					echo "elastest_is_running? "+ elastest_is_running
-					
-					if (!elastest_is_running){
-						echo 'ElasTest is not running...'
-						echo 'START Shared ElasTest'
-						startElastest()
-						//lets set more time for waiting
-						def counter = 3
-						while (!elastest_is_running && counter > 0){
-							elastest_is_running = waitElastest()
-							counter = counter -1
-							def return_status = this.@ctx.sh script: 'docker ps | grep elastest_', returnStatus:true
-							echo 'elastest_is_running:'+elastest_is_running
-						}
-							
-						def return_status = this.@ctx.sh script: 'docker ps | grep elastest_', returnStatus:true
-						if (! elastest_is_running){
-							this.@ctx.currentBuild.result = 'FAILURE'
-							return
-						}
-						else {
-							getApi()
-						}
-					}
-					else {
-						echo 'TODO: provide elastest feedback'
-					}
-				//body of the pipeline
-				echo '[INI] User stages'
-				body();	
-				echo '[END] User stages'
-				
-				this.@ctx.stage ('release elastest')
-					echo ('Shared elastest wont be ende because other jobs would be using it')
-			}
-		}
-		else {
 			this.@ctx.node('docker'){
 				this.@ctx.stage ('launch elastest')
 					
 					echo "sharedElastest ="+this.@shared
 
 					def elastest_is_running = startElastest()
+					if (! elastest_is_running){
+						this.@ctx.currentBuild.result = 'FAILURE'
+						return
+					}
+					else {
+							getApi()
+					}
+					
+				//body of the pipeline	
+				echo '[INI] User stages'
+				body();	
+				echo '[END] User stages'
+				
+				this.@ctx.stage ('release elastest')
+					stopElastest()
+			}
+		}
+		else {
+			this.@ctx.node('commonE2E'){
+				this.@ctx.stage ('launch elastest')
+					echo "sharedElastest ="+this.@shared
+					def elastest_is_running = elastestIsRunning()
+					if (elastest_is_running){ //stop and start again --> elastest is unique and frethis.@ctx.sh with each start
+						stopElastest()
+						sleep(10)//TODO: change for method like waitToStop or something like that
+						elastest_is_running = elastestIsRunning()
+						echo 'elastest_is_running:'+elastest_is_running
+						if (elastest_is_running){
+							this.@ctx.currentBuild.result = 'FAILURE'
+							return
+						}	
+					}
+					startElastest()
+					//lets set more time for waiting
+					def counter = 3
+					while (!elastest_is_running && counter > 0){
+						elastest_is_running = waitElastest()
+						def return_status = this.@ctx.sh script: 'docker ps | grep elastest_', returnStatus:true
+						echo 'elastest_is_running:'+elastest_is_running
+						counter = counter -1
+					}
+
 					if (! elastest_is_running){
 						this.@ctx.currentBuild.result = 'FAILURE'
 						return
