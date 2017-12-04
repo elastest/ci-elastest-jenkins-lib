@@ -97,10 +97,7 @@ class elastest_lib implements Serializable {
 							 consoleLogResponseBody: true,  
 							 ignoreSslErrors: true,
 							 url: 'http://'+sharedElastest_ip+':'+this.@port
-							 
-
-				//new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
-				
+							 				
 				echo '[END] testRemoteElastest'
 				return 0
 				
