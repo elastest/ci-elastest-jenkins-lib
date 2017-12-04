@@ -94,7 +94,6 @@ class elastest_lib implements Serializable {
 				echo 'http://'+sharedElastest_ip+':'+this.@port		
 				
 				def creds = sharedElastest_user":"sharedElastest_pass
-				String auth = creds.bytes.encodeBase64().toString()
 				httpRequest  authentication: 'nightly_elastest',
 							 consoleLogResponseBody: true,  
 							 ignoreSslErrors: true,
