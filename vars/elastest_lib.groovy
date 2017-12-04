@@ -9,7 +9,7 @@ class elastest_lib implements Serializable {
 	private String ip
 	private String port="37000"
 	
-	private String sharedElastest_ip = sharedElastest_ip
+	private String sharedElastest_ip = $SHARED_ELASTEST_IP
 	
 	//parameters for the ElasTest
 	private boolean shared = false
