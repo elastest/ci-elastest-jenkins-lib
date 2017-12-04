@@ -95,10 +95,11 @@ class elastest_lib implements Serializable {
 				
 				def creds = sharedElastest_user":"sharedElastest_pass
 				String auth = creds.bytes.encodeBase64().toString()
-				httpRequest  consoleLogResponseBody: true,  
+				httpRequest  authentication: 'nightly_elastest',
+							 consoleLogResponseBody: true,  
+							 ignoreSslErrors: true,
 							 url: 'http://'+sharedElastest_ip+':'+this.@port,                       
-							 customHeaders:[[name:'Authorization', value:"Basic ${auth}"]]
-				
+
 				//new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
 				
 				echo '[END] testRemoteElastest'
