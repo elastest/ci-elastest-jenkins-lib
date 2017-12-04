@@ -91,9 +91,11 @@ class elastest_lib implements Serializable {
 	def testRemoteElastest(){
 		try {  
 				echo '[INI] testRemoteElastest'		
-				echo 'http://'+sharedElastest_ip+':'+this.@port		
+				def elastest_url =  'http://'+sharedElastest_ip+':'+this.@port
+
+				echo ' '+elastest_url
 				
-				//def response =  httpRequest  url: 'http://'+sharedElastest_ip+':'+this.@port
+				def response =  httpRequest  url: elastest_url
 							 				
 				echo '[END] testRemoteElastest'
 				return 0
