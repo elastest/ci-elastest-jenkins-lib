@@ -96,7 +96,7 @@ class elastest_lib implements Serializable {
 	def startElastest(){
 		echo '[INI] startElastest'
 		//prepare mem
-		this.@ctx.sh "sysctl -w vm.max_map_count=262144"
+		this.@ctx.sh "sudo sysctl -w vm.max_map_count=262144"
 		
 		def start_elastest_result = this.@ctx.sh script: 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+' start --pullcore '+ this.@mode, returnStatus:true
 		echo 'startElastest-- start_elastest_result = '+start_elastest_result
