@@ -245,7 +245,7 @@ class elastest_lib implements Serializable {
 		if (this.@shared == true ){
 			this.@ctx.node('docker'){
 				this.@ctx.stage ('launch elastest')
-					def sharedElastest_ip= this.@ctx.sh (
+					this.@sharedElastest_ip= this.@ctx.sh (
 						script: 'echo $SHARED_ELASTEST_IP',
 						returnStdout: true
 					).trim()
