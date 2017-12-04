@@ -93,11 +93,11 @@ class elastest_lib implements Serializable {
 				echo '[INI] testRemoteElastest'		
 				echo 'http://'+sharedElastest_ip+':'+this.@port		
 				
-				def creds = sharedElastest_user":"sharedElastest_pass
 				httpRequest  authentication: 'nightly_elastest',
 							 consoleLogResponseBody: true,  
 							 ignoreSslErrors: true,
-							 url: 'http://'+sharedElastest_ip+':'+this.@port,                       
+							 url: 'http://'+sharedElastest_ip+':'+this.@port
+							 
 
 				//new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
 				
