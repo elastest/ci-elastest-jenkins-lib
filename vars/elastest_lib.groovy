@@ -10,6 +10,8 @@ class elastest_lib implements Serializable {
 	private String port="37000"
 	
 	private String sharedElastest_ip = ""
+	private String sharedElastest_user = ""
+	private String sharedElastest_pass = ""
 	
 	//parameters for the ElasTest
 	private boolean shared = false
@@ -90,7 +92,14 @@ class elastest_lib implements Serializable {
 		try {  
 				echo '[INI] testRemoteElastest'		
 				echo 'http://'+sharedElastest_ip+':'+this.@port		
-				new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
+				
+				def creds = sharedElastest_user":"sharedElastest_pass
+				String auth = creds.bytes.encodeBase64().toString()
+				httpRequest  consoleLogResponseBody: true,  
+							 url: 'http://'+sharedElastest_ip+':'+this.@port,                       
+							 customHeaders:[[name:'Authorization', value:"Basic ${auth}"]]
+				
+				//new URL('http://'+sharedElastest_ip+':'+this.@port).getText()
 				
 				echo '[END] testRemoteElastest'
 				return 0
@@ -247,6 +256,14 @@ class elastest_lib implements Serializable {
 				this.@ctx.stage ('launch elastest')
 					this.@sharedElastest_ip= this.@ctx.sh (
 						script: 'echo $SHARED_ELASTEST_IP',
+						returnStdout: true
+					).trim()
+					this.@sharedElastest_user= this.@ctx.sh (
+						script: 'echo $SHARED_ELASTEST_USER',
+						returnStdout: true
+					).trim()
+					this.@sharedElastest_pass= this.@ctx.sh (
+						script: 'echo $SHARED_ELASTEST_PASS',
 						returnStdout: true
 					).trim()
 					//test environment values
