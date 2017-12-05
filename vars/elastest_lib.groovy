@@ -95,7 +95,10 @@ class elastest_lib implements Serializable {
 
 				echo ' '+elastest_url
 				
-				def response = this.@ctx.httpRequest  url: elastest_url
+				def response = this.@ctx.httpRequest  authentication: 'nightly_elastest',
+													  consoleLogResponseBody: true,  
+													  ignoreSslErrors: true,
+													  url: elastest_url
 							 				
 				echo '[END] testRemoteElastest'
 				return 0
