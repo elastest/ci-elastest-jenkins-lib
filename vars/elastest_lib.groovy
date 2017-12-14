@@ -183,14 +183,14 @@ class elastest_lib implements Serializable {
 				script: 
 					'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+
 					' start --pullcore --user='+this.@elasetest_user+
-					' --password='+this.@elastest_pass+' '+ this.@mode, 
+					' --password='+this.@elastest_pass+' '+ this.@mode , 
 				returnStatus:true
 		}
 		else {
 			start_elastest_result = this.@ctx.sh 
 				script: 
 					'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+
-					' start --pullcore '+ this.@mode, 
+					' start --pullcore '+ this.@mode , 
 				returnStatus:true
 		}
 		
