@@ -184,9 +184,9 @@ class elastest_lib implements Serializable {
 			def elastests_options = ' start --pullcore --user='+this.@elasetest_user+ ' --password='+this.@elastest_pass+' '+ this.@mode
 			echo elastests_options
 			
-			start_elastest_result = this.@ctx.sh 
+			/*start_elastest_result = this.@ctx.sh 
 				script: elastest_docker_start + this.@version+ elastests_options,				  
-				returnStatus:true
+				returnStatus:true*/
 		}
 		else {
 			def elastests_options = ' start --pullcore '+ this.@mode
