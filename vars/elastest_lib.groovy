@@ -247,14 +247,14 @@ class elastest_lib implements Serializable {
 	*/
 	def waitElastest(){
 		echo '[INI] waitElastest'
-		def elastest_is_running = false
+		def boolean elastest_is_running = false
 		def counter = 3
 		
 		while (!elastest_is_running && counter > 0){
-			elastest_is_running =  this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --container=900', returnStatus:true
+			def running =  this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --container=900', returnStatus:true
 			def return_status = this.@ctx.sh script: 'docker ps | grep elastest_', returnStatus:true
-			elastest_is_running = (return_status == 0 ) && elastest_is_running;
-			echo 'elastest_is_running:'+elastest_is_running
+			elastest_is_running = (return_status == 0 ) && (running == 0);
+			echo '['+counter+']elastest_is_running:'+elastest_is_running
 			counter = counter -1
 		}
 		echo '[END] waitElastest elastest_is_running = '+elastest_is_running
