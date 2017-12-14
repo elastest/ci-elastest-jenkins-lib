@@ -246,7 +246,7 @@ class elastest_lib implements Serializable {
 	*	@return boolean
 	*/
 	def waitElastest(){
-		echo '[INI] elastestIsRunning'
+		echo '[INI] waitElastest'
 		def elastest_is_running = false
 		def counter = 3
 		
@@ -257,7 +257,7 @@ class elastest_lib implements Serializable {
 			echo 'elastest_is_running:'+elastest_is_running
 			counter = counter -1
 		}
-
+		echo '[END] waitElastest (elastest_is_running = '+elastest_is_running+')'
 		return elastest_is_running 
 	}
 	
