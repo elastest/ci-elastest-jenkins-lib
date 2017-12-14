@@ -190,9 +190,11 @@ class elastest_lib implements Serializable {
 		}
 		else {
 			def elastests_options = ' start --pullcore '+ this.@mode
-			start_elastest_result = this.@ctx.sh 
+			echo elastests_options
+
+			/*start_elastest_result = this.@ctx.sh 
 				script: elastest_docker_start + this.@version+ elastests_options,				
-				returnStatus:true
+				returnStatus:true*/
 		}
 		
 		echo 'startElastest-- start_elastest_result = '+start_elastest_result
