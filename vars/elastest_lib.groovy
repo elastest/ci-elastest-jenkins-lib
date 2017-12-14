@@ -235,7 +235,7 @@ class elastest_lib implements Serializable {
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
 		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --running=0 ', returnStatus:true		
 		
-		echo '[END] elastestIsRunning : platform_state('+platform_state+') etm_state('+etm_state+')'
+		echo '[END] elastestIsRunning : platform_state:'+platform_state+' etm_state:'+etm_state
 		
 		return (platform_state ==0 && etm_state==0)
 
@@ -257,7 +257,7 @@ class elastest_lib implements Serializable {
 			echo 'elastest_is_running:'+elastest_is_running
 			counter = counter -1
 		}
-		echo '[END] waitElastest (elastest_is_running = '+elastest_is_running+')'
+		echo '[END] waitElastest elastest_is_running = '+elastest_is_running
 		return elastest_is_running 
 	}
 	
