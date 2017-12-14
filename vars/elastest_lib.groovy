@@ -4,6 +4,8 @@ class elastest_lib implements Serializable {
 	//Some Contstants
 	private experimental = "--mode=experimental"
 	private experimental_lite = "--mode=experimental-lite"
+	
+	private String elastest_docker_start = 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 
 	//configuration of the library
 	private boolean verbose = false //if the library should echo debug information 
@@ -179,18 +181,16 @@ class elastest_lib implements Serializable {
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
+			def elastests_options = ' start --pullcore --user='+this.@elasetest_user+ ' --password='+this.@elastest_pass+' '+ this.@mode
+			
 			start_elastest_result = this.@ctx.sh 
-				script: 
-					'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+
-					' start --pullcore --user='+this.@elasetest_user+
-					' --password='+this.@elastest_pass+' '+ this.@mode , 
+				script: elastest_docker_start + this.@version+ elastests_options,				  
 				returnStatus:true
 		}
 		else {
+			def elastests_options = ' start --pullcore '+ this.@mode
 			start_elastest_result = this.@ctx.sh 
-				script: 
-					'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'+this.@version+
-					' start --pullcore '+ this.@mode , 
+				script: elastest_docker_start + this.@version+ elastests_options,				
 				returnStatus:true
 		}
 		
