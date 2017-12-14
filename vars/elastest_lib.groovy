@@ -27,6 +27,15 @@ class elastest_lib implements Serializable {
 	/*
 	* User methods: Methods to be used in the pipeline to interact with ElasTest
 	*/
+	/*
+	*	@return elastest_user
+	*/
+	def getElasTestUser() { return this.@elastest_user }
+	
+	/*
+	*	@return elastest_pass
+	*/
+	def getElasTestPassword() { return this.@elastest_pass }
 	
 	/*
 	*	@return elastest_ip
