@@ -177,7 +177,7 @@ class elastest_lib implements Serializable {
 		
 		if ( this.@is_Authenticated ){
 			//create password 
-			this.@elastest_pass = "elastest_"+this@ctx.env.BUILD_ID+ this@ctx.env.BUILD_NUMBER
+			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
 			start_elastest_result = this.@ctx.sh 
 				script: 
