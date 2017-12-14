@@ -292,7 +292,7 @@ class elastest_lib implements Serializable {
 				returnStdout: true
 			).trim()
 		}
-		echo '[END] getAPI  ip:port ' +sharedElastest_ip+':'+this.@port
+		echo '[END] getAPI  ip:port ' +this.@ip+':'+this.@port
 	}
 	
 	/*
