@@ -125,7 +125,7 @@ class elastest_lib implements Serializable {
 			this.@ctx.node('commonE2E'){
 				this.@ctx.stage ('launch elastest')
 					echo "sharedElastest ="+this.@shared
-					def elastest_is_running = elastestIsRunning()
+					def elastest_is_running = elastestIsRunning() || elastestIsStuck()
 					if (elastest_is_running){ //stop and start again --> elastest is unique and fresh with each start
 						stopElastest()
 						sleep(10)//TODO: change for method like waitToStop or something like that
@@ -238,6 +238,21 @@ class elastest_lib implements Serializable {
 		echo '[END] elastestIsRunning : platform_state:'+platform_state+' etm_state:'+etm_state
 		
 		return (platform_state ==0 && etm_state==0)
+
+	}
+	/*
+	*	Check if ElasTest exclusive local instance is running (platform and etm)
+	*	@return boolean
+	*/
+	def elastestIsStuck(){
+		echo '[INI] elastestIsStuck'
+		
+		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
+		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --running=0 ', returnStatus:true		
+		
+		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state
+		
+		return (platform_state !=0 && etm_state!=0)
 
 	}
 	
