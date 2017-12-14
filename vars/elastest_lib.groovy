@@ -252,7 +252,7 @@ class elastest_lib implements Serializable {
 		
 		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state
 		
-		return (platform_state !=0 && etm_state!=0)
+		return (platform_state !=0 || etm_state!=0)
 
 	}
 	
