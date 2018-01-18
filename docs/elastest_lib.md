@@ -58,7 +58,7 @@ The following properties can be configured in order to grant a more accurate Ela
 	* Setter: _elastest_lib.setMode("experimental"/"experimental-lite"/"")_ 
 *	__version__ is the defined version of the elastest that should be used.
 	* Default value: _"latest"_
-	* Setter: _elastest_lib.setLite("20171017")_ 
+	* Setter: _elastest_lib.setVersion("20171017")_ 
 
 
 API
