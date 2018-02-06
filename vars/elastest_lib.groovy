@@ -86,6 +86,23 @@ class elastest_lib implements Serializable {
 		echo '[END] connect2ElastestNetwork'
 	}
 	
+	def pullERE(){
+		return pullERE(this.@version)
+	}
+	/*
+	* force to retrieve ere into environment.
+	*	
+	*/
+	def pullERE(String ere_version){
+		echo '[INI] pullERE'
+		if (! this.@shared){
+			echo "login in ecr"
+			this.@ctx.sh "$(aws ecr get-login --no-include-email --region eu-west-1)" 
+			echo "pulling ERE"
+			this.@ctx.sh "docker pull 842800759158.dkr.ecr.eu-west-1.amazonaws.com/elastest/elastest-recommendation-engine:"+ere_version			
+		}
+		echo '[END] pullERE'
+	}
 	/*
 	*	predefined pipeline for executing e2e test over a managed ElasTest platform
 	*/
