@@ -23,7 +23,7 @@ class elastest_lib implements Serializable {
 	//parameters for the ElasTest
 	private String mode = '' //default normal
 	private String version='latest'
-	private String is_Authenticated = true
+	private String is_Authenticated = false
 
 	
 	/*
@@ -194,7 +194,7 @@ class elastest_lib implements Serializable {
 												 returnStatus:true
 		}
 		else {
-			def elastests_options = ' start --pullcore --server-address='+public_ip+' ' this.@mode
+			def elastests_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
 			echo elastests_options
 
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				
