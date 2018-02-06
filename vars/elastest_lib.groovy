@@ -10,6 +10,8 @@ class elastest_lib implements Serializable {
 	//configuration of the library
 	private boolean verbose = false //if the library should echo debug information 
 	private boolean shared = false //if the ElasTest instance is shared
+	private boolean is_Authenticated = false
+
 	def ctx //context of the executing pipeline
 
 	//info of the ElasTest
@@ -23,7 +25,6 @@ class elastest_lib implements Serializable {
 	//parameters for the ElasTest
 	private String mode = '' //default normal
 	private String version='latest'
-	private String is_Authenticated = false
 
 	
 	/*
