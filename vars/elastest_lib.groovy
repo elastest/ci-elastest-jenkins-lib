@@ -175,16 +175,18 @@ class elastest_lib implements Serializable {
 		def start_elastest_result = 1
 		
 		//prepare mem
+		
 		this.@ctx.sh "sudo sysctl -w vm.max_map_count=262144"
 		
+		def public_ip = this.@ctx.sh (
+											script: 'curl -s ipinfo.io/ip',
+											returnStdout: true
+										).trim()
 		if ( this.@is_Authenticated ){
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
-			def public_ip = this.@ctx.sh (
-											script: 'curl -s ipinfo.io/ip',
-											returnStdout: true
-										).trim()
+			
 			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
 			echo elastests_options
 			
@@ -192,7 +194,7 @@ class elastest_lib implements Serializable {
 												 returnStatus:true
 		}
 		else {
-			def elastests_options = ' start --pullcore '+ this.@mode
+			def elastests_options = ' start --pullcore --server-address='+public_ip+' ' this.@mode
 			echo elastests_options
 
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				
