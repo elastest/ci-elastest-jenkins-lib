@@ -125,7 +125,7 @@ class elastest_lib implements Serializable {
 			this.@ctx.node('commonE2E'){
 				this.@ctx.stage ('launch elastest')
 					echo "sharedElastest ="+this.@shared
-					def elastest_is_running = elastestIsRunning() || elastestIsStuck()
+					def elastest_is_running = elastestIsStuck() // || elastestIsRunning() not necessary as stuck will also check if it is running
 					if (elastest_is_running){ //stop and start again --> elastest is unique and fresh with each start
 						stopElastest()
 						sleep(10)//TODO: change for method like waitToStop or something like that
@@ -180,8 +180,9 @@ class elastest_lib implements Serializable {
 		if ( this.@is_Authenticated ){
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
-			
-			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+ this.@mode
+			def public_ip = this.@ctx.sh : script 'curl -s ipinfo.io/ip',
+											returnStdout: true
+			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' ' +this.@mode
 			echo elastests_options
 			
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				  
