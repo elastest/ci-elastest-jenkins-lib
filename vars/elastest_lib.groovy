@@ -97,7 +97,10 @@ class elastest_lib implements Serializable {
 		echo '[INI] pullERE'
 		if (! this.@shared){
 			echo "login in ecr"
-			this.@ctx.sh "$(aws ecr get-login --no-include-email --region eu-west-1)" 
+			def login_str = this.@ctx.sh script: 'aws ecr get-login --no-include-email --region eu-west-1',
+						  returnStdout: true
+			this.@ctx.sh login_str		
+			
 			echo "pulling ERE"
 			this.@ctx.sh "docker pull 842800759158.dkr.ecr.eu-west-1.amazonaws.com/elastest/elastest-recommendation-engine:"+ere_version			
 		}
