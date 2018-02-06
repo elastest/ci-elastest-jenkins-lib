@@ -180,7 +180,8 @@ class elastest_lib implements Serializable {
 		if ( this.@is_Authenticated ){
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
-			def public_ip = this.@ctx.sh : script 'curl -s ipinfo.io/ip',
+			
+			def public_ip = this.@ctx.sh script: 'curl -s ipinfo.io/ip',
 											returnStdout: true
 			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' ' +this.@mode
 			echo elastests_options
