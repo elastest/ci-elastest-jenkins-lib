@@ -11,6 +11,8 @@ class elastest_lib implements Serializable {
 	private boolean verbose = false //if the library should echo debug information 
 	private boolean shared = false //if the ElasTest instance is shared
 	private boolean is_Authenticated = false
+	private boolean with_ere = false
+	
 
 	def ctx //context of the executing pipeline
 
@@ -25,6 +27,7 @@ class elastest_lib implements Serializable {
 	//parameters for the ElasTest
 	private String mode = '' //default normal
 	private String version='latest'
+	private String ere_version = 'latest'
 
 	
 	/*
@@ -85,6 +88,7 @@ class elastest_lib implements Serializable {
 		}
 		echo '[END] connect2ElastestNetwork'
 	}
+	
 	
 	def pullERE(){
 		return pullERE(this.@version)
@@ -224,6 +228,11 @@ class elastest_lib implements Serializable {
 		
 		echo 'startElastest-- start_elastest_result = '+start_elastest_result
 		
+		if ( this.@with_ere ){
+			echo 'pulling ere'
+			pullERE( ere_version )
+			
+		}
 		echo '[END] startElastest'
 		return (start_elastest_result==0)
 	}
@@ -399,7 +408,8 @@ class elastest_lib implements Serializable {
 	*/
 	def setShared( boolean value) { this.@shared = value }
 	
-	
+	def setEre (String value){ this.@ere_version = value
+							   this.@with_ere = true }
 	/*
 	*	Override for echo as if not accessed in the context doesn't work
 	*/
