@@ -222,7 +222,7 @@ class elastest_lib implements Serializable {
 		}
 		else {
 			//def elastests_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
-			def elastest_options =  'start --pullcore  '+this.@mode
+			def elastests_options = ' start --pullcore  '+this.@mode
 			echo elastests_options
 
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				
