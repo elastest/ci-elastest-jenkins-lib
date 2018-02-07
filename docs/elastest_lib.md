@@ -59,7 +59,12 @@ The following properties can be configured in order to grant a more accurate Ela
 *	__version__ is the defined version of the elastest that should be used.
 	* Default value: _"latest"_
 	* Setter: _elastest_lib.setLite("20171017")_ 
-
+*	__ERE__: for selecting version of the ERE to use.
+	* Default value: _false_ (no ere will be pulled)
+	* Setter: _elastest_lib.setEre("latest")_
+*	__authentication__: request for an authenticated ElasTest. It is ignored when used on a remote ElasTest
+	* Default value: _false_
+	* Setter: _elastest_lib.setAuthenticatedElastest(true/false)_
 
 API
 ----------------
@@ -67,8 +72,10 @@ API
 The library provides some methods to interact with the ElasTest platform:
 * `elastest.getIP()` returns the ip of the ElasTest platform
 * `elastest.getPort()` returns the port of the Elastest platform
-* `elastest.getEtmUrl()` returns the conection chain for the etm.
+* `elastest.getEtmUrl()` returns the connection chain for the etm.
 * `elastest.connect2ElastestNetwork()` connects the running container with the elastest network. It is necessary for e2e tests running inside a custom container.
+* `elastest.getElasTestUser()` returns the user for authenticate into the ElasTest
+* `elastest.getElasTestPassword()` returns the password for authenticate into the ElasTest.
 
 
 Important !!!
