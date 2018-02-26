@@ -425,7 +425,3 @@ class elastest_lib implements Serializable {
 	}
 	
 }
-
-
-
-
