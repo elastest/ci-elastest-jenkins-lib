@@ -58,8 +58,6 @@ class elastest_lib implements Serializable {
 	*	@ return full conection url for torm
 	*/
 	def getEtmUrl() { 
-		if (this.@shared == true )
-				return 'http://'+sharedElastest_ip+':'+this.@port  
 		return 'http://'+this.@ip+':'+this.@port 
 	}
 	
