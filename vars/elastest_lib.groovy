@@ -47,10 +47,7 @@ class elastest_lib implements Serializable {
 	/*
 	*	@return elastest_ip
 	*/
-	def getIp() { 
-		if (this.@shared == true )
-			return sharedElastest_ip
-	return this.@ip }
+	def getIp() { return this.@ip }
 
 	/*
 	*	@return elastest_port
@@ -127,7 +124,7 @@ class elastest_lib implements Serializable {
 				this.@ctx.stage ('launch elastest')
 				
 					echo "sharedElastest ="+this.@shared
-					echo "SHARED_ELASTEST_IP:"+sharedElastest_ip
+					echo "SHARED_ELASTEST_IP: $SHARED_ELASTEST_IP"
 
 					def elastest_is_running = testRemoteElastest()
 					if (! elastest_is_running){
