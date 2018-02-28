@@ -123,15 +123,12 @@ class elastest_lib implements Serializable {
 				
 					echo "sharedElastest ="+this.@shared
 					//echo "SHARED_ELASTEST_IP: $SHARED_ELASTEST_IP"
-
+					initializeApi()
 					def elastest_is_running = testRemoteElastest()
 					if (! elastest_is_running){
 						this.@ctx.currentBuild.result = 'FAILURE'
 						return
-					}
-					else {
-							initializeApi()
-					}
+					}	
 					
 				//body of the pipeline	
 				echo '[INI] User stages'
