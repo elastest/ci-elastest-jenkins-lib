@@ -125,7 +125,7 @@ class elastest_lib implements Serializable {
 					//echo "SHARED_ELASTEST_IP: $SHARED_ELASTEST_IP"
 					initializeApi()
 					def elastest_is_running = testRemoteElastest()
-					if (elastest_is_running == 0){
+					if (elastest_is_running != 0){
 						this.@ctx.currentBuild.result = 'FAILURE'
 						return
 					}	
