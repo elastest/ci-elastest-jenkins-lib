@@ -402,6 +402,7 @@ class elastest_lib implements Serializable {
 	*	Initialization of the shared ElasTest for multiple jobs
 	*/
 	def setShared( boolean value) { this.@shared = value }
+	def getShared() { return this.@shared }
 	
 	def setEre (String value){ this.@ere_version = value
 							   this.@with_ere = true }
