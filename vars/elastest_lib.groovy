@@ -12,6 +12,7 @@ class elastest_lib implements Serializable {
 	private boolean shared = false //if the ElasTest instance is shared
 	private boolean is_Authenticated = false
 	private boolean with_ere = false
+	private boolean with_tl = false
 	
 
 	def ctx //context of the executing pipeline
@@ -199,7 +200,8 @@ class elastest_lib implements Serializable {
 	def startElastest(){
 		echo '[INI] startElastest'
 		def start_elastest_result = 1
-		
+		def tl = ""
+		def logs = ""
 		//prepare mem
 		
 		this.@ctx.sh "sudo sysctl -w vm.max_map_count=262144"
@@ -208,13 +210,19 @@ class elastest_lib implements Serializable {
 											script: 'curl -s ipinfo.io/ip',
 											returnStdout: true
 										).trim()
+		if ( this.@with_tl ){
+			tl = " -tl"
+		}
+		if ( this.@verbose ){
+			logs = " -l"
+		}
 		if ( this.@is_Authenticated ){
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
 			
 			// def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
-			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode
+			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode +tl+logs
 			echo elastests_options
 			
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				  
@@ -222,7 +230,7 @@ class elastest_lib implements Serializable {
 		}
 		else {
 			//def elastests_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
-			def elastests_options =  ' start --pullcore  '+this.@mode
+			def elastests_options =  ' start --pullcore  '+this.@mode+tl+logs
 			echo elastests_options
 
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				
@@ -413,6 +421,12 @@ class elastest_lib implements Serializable {
 	
 	def setEre (String value){ this.@ere_version = value
 							   this.@with_ere = true }
+	
+	/*
+	*	To set TestLink on ElasTest
+	*/
+	def setTestLink(boolean value){ this.@with_tl = true }
+	}						
 	/*
 	*	Override for echo as if not accessed in the context doesn't work
 	*/
