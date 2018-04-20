@@ -48,10 +48,7 @@ class elastest_lib implements Serializable {
 	/*
 	*	@return elastest_ip
 	*/
-	def getIp() { 
-		if (this.@shared == true )
-			return sharedElastest_ip
-	return this.@ip }
+	def getIp() { return this.@ip }
 
 	/*
 	*	@return elastest_port
@@ -62,8 +59,6 @@ class elastest_lib implements Serializable {
 	*	@ return full conection url for torm
 	*/
 	def getEtmUrl() { 
-		if (this.@shared == true )
-				return 'http://'+sharedElastest_ip+':'+this.@port  
 		return 'http://'+this.@ip+':'+this.@port 
 	}
 	
@@ -128,16 +123,13 @@ class elastest_lib implements Serializable {
 				this.@ctx.stage ('launch elastest')
 				
 					echo "sharedElastest ="+this.@shared
-					echo "SHARED_ELASTEST_IP:"+sharedElastest_ip
-
+					//echo "SHARED_ELASTEST_IP: $SHARED_ELASTEST_IP"
+					initializeApi()
 					def elastest_is_running = testRemoteElastest()
-					if (! elastest_is_running){
+					if (elastest_is_running != 0){
 						this.@ctx.currentBuild.result = 'FAILURE'
 						return
-					}
-					else {
-							initializeApi()
-					}
+					}	
 					
 				//body of the pipeline	
 				echo '[INI] User stages'
@@ -222,6 +214,7 @@ class elastest_lib implements Serializable {
 			
 			
 			// def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
+
 			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
 			echo elastests_options
 			
@@ -230,7 +223,9 @@ class elastest_lib implements Serializable {
 		}
 		else {
 			//def elastests_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
+
 			def elastests_options =  ' start --pullcore  '+ this.@mode + tl + logs
+
 			echo elastests_options
 
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				
@@ -418,6 +413,7 @@ class elastest_lib implements Serializable {
 	*	Initialization of the shared ElasTest for multiple jobs
 	*/
 	def setShared( boolean value) { this.@shared = value }
+	def getShared() { return this.@shared }
 	
 	def setEre (String value){ this.@ere_version = value
 							   this.@with_ere = true }
