@@ -66,6 +66,8 @@ The following properties can be configured in order to grant a more accurate Ela
 	* Default value: _false_
 	* Setter: _elastest_lib.setTestLink(true/false)_
 *	__verbose__: it configures the library and the elastest platform to run in the verbose mode, where most of the logs will be printed (library) or accesible (platform)
+	* Default value: _false_
+	* Setter: _elastest_lib.setVerbose(true/false)_
 
 API
 ----------------
