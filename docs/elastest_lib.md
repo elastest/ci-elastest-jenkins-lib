@@ -30,13 +30,10 @@ def elastest= elastest_lib.getElastestMethods()
 
 ```
 
-If the job make use of the lite version of the ElasTest the next instruction should be added:
-```
-// lite version of elastest
-elastest_lib.setLite(' --lite') 
-```
+Then we should declare configuration options: shared, mode, version, ere, authentication... (see Configuration Options)
 
-Then all the stages of the pipeline should be added inside the `elastest.pipeline({...})`:
+
+And then you should declare all the stages of the pipeline inside the `elastest.pipeline({...})`:
 ```
 elastest_lib.pipeline({
 	stage "stage 1"
@@ -65,6 +62,10 @@ The following properties can be configured in order to grant a more accurate Ela
 *	__authentication__: request for an authenticated ElasTest. It is ignored when used on a remote ElasTest
 	* Default value: _false_
 	* Setter: _elastest_lib.setAuthenticatedElastest(true/false)_
+*	__testLink__: for launching ElasTest with the testLink configuration.
+	* Default value: _false_
+	* Setter: _elastest_lib.setTestLink(true/false)_
+*	__verbose__: it configures the library and the elastest platform to run in the verbose mode, where most of the logs will be printed (library) or accesible (platform)
 
 API
 ----------------
@@ -96,7 +97,7 @@ java.lang.NullPointerException: Cannot invoke method image() on null object
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:113)
 ```
 
-This errors can be soved by referencing the appropriate context in the declaration:
+This errors can be solved by referencing the appropriate context in the declaration:
 ```
 def mycontainer = elastest.ctx.docker.image('...')
 ```
