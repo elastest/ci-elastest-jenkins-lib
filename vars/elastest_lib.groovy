@@ -14,6 +14,8 @@ class elastest_lib implements Serializable {
 	private boolean with_ere = false
 	private boolean with_tl = false
 	
+	private String optionals = "" //for testing diferent platform options before being standarized
+	
 
 	def ctx //context of the executing pipeline
 
@@ -193,7 +195,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] startElastest'
 		def start_elastest_result = 1
 		def tl = ""
-		def logs = ""
+		def logs = " "
 		//prepare mem
 		
 		this.@ctx.sh "sudo sysctl -w vm.max_map_count=262144"
@@ -203,10 +205,10 @@ class elastest_lib implements Serializable {
 											returnStdout: true
 										).trim()
 		if ( this.@with_tl ){
-			tl = " -tl"
+			tl = " -tl "
 		}
 		if ( this.@verbose ){
-			logs = " -l"
+			logs = " -l "
 		}
 		if ( this.@is_Authenticated ){
 			//create password 
@@ -215,7 +217,7 @@ class elastest_lib implements Serializable {
 			
 			// def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
 
-			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
+			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs + this.@optionals
 			echo elastests_options
 			
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				  
@@ -224,7 +226,7 @@ class elastest_lib implements Serializable {
 		else {
 			//def elastests_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
 
-			def elastests_options =  ' start --pullcore  '+ this.@mode + tl + logs
+			def elastests_options =  ' start --pullcore  '+ this.@mode + tl + logs + this.@optionals
 
 			echo elastests_options
 
@@ -422,6 +424,11 @@ class elastest_lib implements Serializable {
 	*	To set TestLink on ElasTest
 	*/
 	def setTestLink(boolean value){ this.@with_tl = true }
+	
+	/*
+	* To set option of elastest platform before they get standarized
+	*/
+	def setOptionals(String value){ this.@optionals = value }
 	
 	/*
 	*	Override for echo as if not accessed in the context doesn't work
