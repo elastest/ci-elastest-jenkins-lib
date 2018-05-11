@@ -9,7 +9,7 @@ class elastest_lib implements Serializable {
 
 	//configuration of the library
 	private boolean verbose = false //if the library should echo debug information 
-	private boolean shared = false //if the ElasTest instance is shared
+	private boolean shared = $SHARED_ELASTEST //if the ElasTest instance is shared
 	private boolean is_Authenticated = false
 	private boolean with_ere = false
 	private boolean with_tl = false
@@ -412,7 +412,9 @@ class elastest_lib implements Serializable {
 	/*
 	*	Initialization of the shared ElasTest for multiple jobs
 	*/
-	def setShared( boolean value) { this.@shared = value }
+	def setShared( boolean value) { 
+		this.@shared = value 
+	}
 	def getShared() { return this.@shared }
 	
 	def setEre (String value){ this.@ere_version = value
