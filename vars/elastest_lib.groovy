@@ -9,7 +9,7 @@ class elastest_lib implements Serializable {
 
 	//configuration of the library
 	private boolean verbose = false //if the library should echo debug information 
-	private boolean shared = $SHARED_ELASTEST //if the ElasTest instance is shared
+	private boolean shared = false //if the ElasTest instance is shared
 	private boolean is_Authenticated = false
 	private boolean with_ere = false
 	private boolean with_tl = false
