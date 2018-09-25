@@ -5,7 +5,7 @@ class elastest_lib implements Serializable {
 	private experimental = "--mode=experimental"
 	private experimental_lite = "--mode=experimental-lite"
 	
-	private String elastest_docker_start = 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	private String elastest_docker_start = 'docker run -d --name="elastest_platform" -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 
 	//configuration of the library
 	private boolean verbose = false //if the library should echo debug information 
