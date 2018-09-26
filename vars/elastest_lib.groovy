@@ -8,7 +8,7 @@ class elastest_lib implements Serializable {
 	private String elastest_docker_start = 'docker run -d --name="elastest_platform" -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 
 	//configuration of the library
-	private boolean verbose = false //if the library should echo debug information 
+	private boolean verbose = true //if the library should echo debug information 
 	private boolean shared = false //if the ElasTest instance is shared
 	private boolean is_Authenticated = false
 	private boolean with_ere = false
