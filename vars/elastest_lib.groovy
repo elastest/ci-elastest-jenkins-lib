@@ -292,7 +292,9 @@ class elastest_lib implements Serializable {
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
 		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' inspect --api ', returnStatus:true		
 		def tl_volume_c = this.@ctx.sh script: ' docker volume ls | grep -c elastest_etm-testlink', returnStdout:true
+		echo 'tl_volume_c ='+tl_volume_c
 		def folder = this.@ctx.sh script: 'ls  ~/.elastest', returnStatus:true 
+		echo 'folder ='+folder
 		
 		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state+' tl_container_c: '+ tl_volume_c+ ' .elastest/:'+ folder
 		
