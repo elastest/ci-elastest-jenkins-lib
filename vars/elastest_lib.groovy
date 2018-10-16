@@ -5,7 +5,9 @@ class elastest_lib implements Serializable {
 	private experimental = "--mode=experimental"
 	private experimental_lite = "--mode=experimental-lite"
 	
-	private String elastest_docker_start = 'docker run -d --name="elastest_platform" -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	private String elastest_docker_cmd = 'docker run -d --name="elastest_platform" -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	
+	private String elastest_wait_options = ' wait --container=900'
 
 	//configuration of the library
 	private boolean verbose = false //if the library should echo debug information 
@@ -215,22 +217,22 @@ class elastest_lib implements Serializable {
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
 			
-			// def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
+			// def elastest_start_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
 
-			def elastests_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs + this.@optionals
-			echo elastests_options
+			def elastest_start_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs + this.@optionals
+			echo elastest_start_options
 			
-			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				  
+			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_start_options,				  
 												 returnStatus:true
 		}
 		else {
-			//def elastests_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
+			//def elastest_start_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
 
-			def elastests_options =  ' start --pullcore  '+ this.@mode + tl + logs + this.@optionals
+			def elastest_start_options =  ' start --pullcore  '+ this.@mode + tl + logs + this.@optionals
 
-			echo elastests_options
+			echo elastest_start_options
 
-			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_start + this.@version+ elastests_options,				
+			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_start_options,				
 													returnStatus:true
 		}
 		
@@ -277,7 +279,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] elastestIsRunning'
 		
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
-		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' inspect --api ', returnStatus:true		
+		def etm_state = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' inspect --api ', returnStatus:true		
 		
 		echo '[END] elastestIsRunning : platform_state:'+platform_state+' etm_state:'+etm_state
 		
@@ -292,7 +294,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] elastestIsStuck'
 		
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
-		def etm_state = this.@ctx.sh script: ' docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' inspect --api ', returnStatus:true		
+		def etm_state = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' inspect --api ', returnStatus:true		
 		
 		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state
 		
@@ -310,7 +312,7 @@ class elastest_lib implements Serializable {
 		def counter = 3
 		
 		while (!elastest_is_running && counter > 0){
-			def running =  this.@ctx.sh script: 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' wait --container=900', returnStatus:true
+			def running =  this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_wait_options, returnStatus:true
 			def return_status = this.@ctx.sh script: 'docker ps | grep elastest_', returnStatus:true
 			elastest_is_running = (return_status == 0 ) && (running == 0);
 			echo '['+counter+']elastest_is_running:'+elastest_is_running
@@ -361,7 +363,7 @@ class elastest_lib implements Serializable {
 	def stopElastest(){
 		echo '[INI] stopElastest'
 		if (! this.@shared == true){
-			def stop_elastest_result = this.@ctx.sh script:'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform:'+this.@version+' stop', returnStatus:true
+			def stop_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' stop', returnStatus:true
 			def stop_containers_result = this.@ctx.sh script:"docker ps -a -f name=elastest -q |xargs docker kill", returnStatus:true
 			def delete_images_result = 	 this.@ctx.sh script:"docker images -q |xargs docker rmi -f ", returnStatus:true
 			def delete_volumes_result = this.@ctx.sh script: "docker volume ls |xargs docker volume rm -f", returnStatus:true											
