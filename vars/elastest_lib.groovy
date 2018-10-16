@@ -10,7 +10,7 @@ class elastest_lib implements Serializable {
 	private String elastest_wait_options = ' wait --container=900'
 
 	//configuration of the library
-	private boolean verbose = false //if the library should echo debug information 
+	private boolean verbose = true //if the library should echo debug information 
 	private boolean shared = false //if the ElasTest instance is shared
 	private boolean is_Authenticated = false
 	private boolean with_ere = false
@@ -214,19 +214,19 @@ class elastest_lib implements Serializable {
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
-			
-			// def elastest_start_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
+			// def elastests_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
 
-			def elastest_start_options = ' start --pullcore --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
-			echo elastest_start_options
+			def elastests_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
+			echo elastests_options
 			
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_start_options,				  
 												 returnStatus:true
 		}
 		else {
-			//def elastest_start_options = ' start --pullcore --server-address='+public_ip+' '+this.@mode
 
-			def elastest_start_options =  ' start --pullcore  '+ this.@mode + tl + logs
+			//def elastests_options = ' start  --server-address='+public_ip+' '+this.@mode
+
+			def elastests_options =  ' start  '+ this.@mode + tl + logs
 
 			echo elastest_start_options
 
@@ -294,10 +294,13 @@ class elastest_lib implements Serializable {
 		
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
 		def etm_state = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' inspect --api ', returnStatus:true		
+		def folder = this.@ctx.sh script: 'ls  ~/.elastest', returnStatus:true 
 		
-		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state
+		echo 'folder ='+folder
 		
-		return (platform_state !=0 || etm_state!=0)
+		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state+ ' .elastest/:'+ folder
+		
+		return (platform_state !=0 || etm_state!=0 || tl_volume_c == '1' || folder !=0 )
 
 	}
 	
@@ -366,6 +369,13 @@ class elastest_lib implements Serializable {
 			def stop_containers_result = this.@ctx.sh script:"docker ps -a -f name=elastest -q |xargs docker kill", returnStatus:true
 			def delete_images_result = 	 this.@ctx.sh script:"docker images -q |xargs docker rmi -f ", returnStatus:true
 			def delete_volumes_result = this.@ctx.sh script: "docker volume ls |xargs docker volume rm -f", returnStatus:true											
+			def folder = this.@ctx.sh script: 'ls  ~/.elastest', returnStatus:true 
+			
+			this.@ctx.sh script:"docker volume rm -f elastest_etm-testlink ", returnStatus:true
+			
+			if (folder==1){
+			      this.@ctx.sh script:"sudo rm -Rf ~/.elastest", returnStatus:true
+			}
 			echo 'stop_elastest_result = '+(stop_elastest_result &&	stop_containers_result && stop_containers_result && delete_images_result && delete_volumes_result)
 		}		
 		echo '[END] stopElastest'
