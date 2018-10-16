@@ -214,10 +214,10 @@ class elastest_lib implements Serializable {
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
 			
-			// def elastests_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
+			// def elastest_start_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' --server-address='+public_ip+' '+this.@mode
 
-			def elastests_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
-			echo elastests_options
+			def elastest_start_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
+			echo elastest_start_options
 			
 			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_start_options,				  
 												 returnStatus:true
@@ -226,7 +226,7 @@ class elastest_lib implements Serializable {
 
 			//def elastests_options = ' start  --server-address='+public_ip+' '+this.@mode
 
-			def elastests_options =  ' start  '+ this.@mode + tl + logs
+			def elastest_start_options =  ' start  '+ this.@mode + tl + logs
 
 			echo elastest_start_options
 
