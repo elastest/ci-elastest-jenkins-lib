@@ -8,6 +8,8 @@ class elastest_lib implements Serializable {
 	private String elastest_named_docker_cmd = 'docker run -d --name="elastest_platform" -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 	
 	private String elastest_docker_cmd = 'docker run -d  -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	
+	private String elastest_docker_novolume_cmd = 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 
 	private String elastest_wait_options = ' wait --container=900'
 
@@ -281,7 +283,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] elastestIsRunning'
 		
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
-		def etm_state = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' inspect --api ', returnStatus:true		
+		def etm_state = this.@ctx.sh script: ""+elastest_docker_novolume_cmd + this.@version+' inspect --api ', returnStatus:true		
 		
 		echo '[END] elastestIsRunning : platform_state:'+platform_state+' etm_state:'+etm_state
 		
@@ -296,7 +298,7 @@ class elastest_lib implements Serializable {
 		echo '[INI] elastestIsStuck'
 		
 		def platform_state = this.@ctx.sh script: 'docker ps | grep elastest_platform | grep -c Up', returnStatus:true
-		def etm_state = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' inspect --api ', returnStatus:true		
+		def etm_state = this.@ctx.sh script: ""+elastest_docker_novolume_cmd + this.@version+' inspect --api ', returnStatus:true		
 		
 		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state
 		
@@ -365,7 +367,7 @@ class elastest_lib implements Serializable {
 	def stopElastest(){
 		echo '[INI] stopElastest'
 		if (! this.@shared == true){
-			def stop_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+' stop', returnStatus:true
+			def stop_elastest_result = this.@ctx.sh script: ""+elastest_docker_novolume_cmd + this.@version+' stop', returnStatus:true
 			def stop_containers_result = this.@ctx.sh script:"docker ps -a -f name=elastest -q |xargs docker kill", returnStatus:true
 			def delete_images_result = 	 this.@ctx.sh script:"docker images -q |xargs docker rmi -f ", returnStatus:true
 			def delete_volumes_result = this.@ctx.sh script: "docker volume ls |xargs docker volume rm -f", returnStatus:true											
