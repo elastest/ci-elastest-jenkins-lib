@@ -7,9 +7,9 @@ class elastest_lib implements Serializable {
 	
 	private String elastest_named_docker_cmd = 'docker run -d --name="elastest_platform"  -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 	
-	private String elastest_docker_cmd = 'docker run -d  -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	private String elastest_docker_cmd = 'docker run  -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 
-	private String elastest_docker_novolume_cmd = 'docker run -d -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	private String elastest_docker_novolume_cmd = 'docker run -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 		
 	private String elastest_wait_options = ' wait --container=900'
 
