@@ -365,6 +365,13 @@ class elastest_lib implements Serializable {
 			def stop_containers_result = this.@ctx.sh script:"docker ps -a -f name=elastest -q |xargs docker kill", returnStatus:true
 			def delete_images_result = 	 this.@ctx.sh script:"docker images -q |xargs docker rmi -f ", returnStatus:true
 			def delete_volumes_result = this.@ctx.sh script: "docker volume ls |xargs docker volume rm -f", returnStatus:true											
+			def folder = this.@ctx.sh script: 'ls  ~/.elastest', returnStatus:true 
+			
+			this.@ctx.sh script:"docker volume rm -f elastest_etm-testlink ", returnStatus:true
+			
+			if (folder==1){
+			      this.@ctx.sh script:"sudo rm -Rf ~/.elastest", returnStatus:true
+			}
 			echo 'stop_elastest_result = '+(stop_elastest_result &&	stop_containers_result && stop_containers_result && delete_images_result && delete_volumes_result)
 		}		
 		echo '[END] stopElastest'
