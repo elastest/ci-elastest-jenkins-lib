@@ -5,8 +5,10 @@ class elastest_lib implements Serializable {
 	private experimental = "--mode=experimental"
 	private experimental_lite = "--mode=experimental-lite"
 	
-	private String elastest_docker_cmd = 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+	private String elastest_named_docker_cmd = 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 	
+	private String elastest_docker_cmd = 'docker run -d --name="elastest_platform" -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
+
 	private String elastest_wait_options = ' wait --container=900'
 
 	//configuration of the library
@@ -219,7 +221,7 @@ class elastest_lib implements Serializable {
 			def elastest_start_options = ' start  --user='+this.@elastest_user+ ' --password='+this.@elastest_pass+' '+this.@mode + tl + logs
 			echo elastest_start_options
 			
-			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_start_options,				  
+			start_elastest_result = this.@ctx.sh script: ""+elastest_named_docker_cmd + this.@version+ elastest_start_options,				  
 												 returnStatus:true
 		}
 		else {
@@ -230,7 +232,7 @@ class elastest_lib implements Serializable {
 
 			echo elastest_start_options
 
-			start_elastest_result = this.@ctx.sh script: ""+elastest_docker_cmd + this.@version+ elastest_start_options,				
+			start_elastest_result = this.@ctx.sh script: ""+elastest_named_docker_cmd + this.@version+ elastest_start_options,				
 													returnStatus:true
 		}
 		
