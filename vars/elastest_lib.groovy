@@ -304,7 +304,7 @@ class elastest_lib implements Serializable {
 		
 		echo '[END] elastestIsStuck : platform_state:'+platform_state+' etm_state:'+etm_state+ ' .elastest/:'+ folder
 		
-		return (platform_state !=0 || etm_state!=0 || tl_volume_c == '1' || folder !=0 )
+		return (platform_state !=0 || etm_state!=0  || folder !=0 )
 
 	}
 	
