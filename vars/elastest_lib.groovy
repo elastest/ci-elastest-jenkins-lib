@@ -211,9 +211,6 @@ class elastest_lib implements Serializable {
 		if ( this.@with_tl ){
 			tl = " -tl"
 		}
-		if ( this.@verbose ){
-			logs = " -l"
-		}
 		if ( this.@is_Authenticated ){
 			//create password 
 			this.@elastest_pass = "elastest_"+ this.@ctx.env.BUILD_ID+ this.@ctx.env.BUILD_NUMBER
