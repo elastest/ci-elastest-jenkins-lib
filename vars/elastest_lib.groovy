@@ -2,8 +2,8 @@
 class elastest_lib implements Serializable {
 	
 	//Some Contstants
-	private experimental = "--mode=experimental"
-	private experimental_lite = "--mode=experimental-lite"
+	private experimental = "--mode=singlenode"
+	private experimental_lite = "--mode=mini"
 	
 	private String elastest_named_docker_cmd = 'docker run -d --name="elastest_platform"  -v ~/.elastest:/data -v /var/run/docker.sock:/var/run/docker.sock --rm elastest/platform:'
 	
